@@ -1,0 +1,29 @@
+﻿@using Umbraco.Web
+@using Umbraco.Web.Mvc
+@using Umbraco.Core.Models.PublishedContent
+@using Dragonfly.Umbraco8Theming
+
+
+@inherits Umbraco.Web.Macros.PartialViewMacroPage
+
+@{
+
+    var thisModel = Umbraco.AssignedContentItem;
+    var thisTheme = thisModel.Value<string>("Theme", fallback: Fallback.ToAncestors);
+
+    //var macroParams = ViewData["MacroParams"] != null ? ViewData["MacroParams"] as IDictionary<string, object>: new Dictionary<string, object>();
+
+    //var myParam = Dragonfly.Umbraco8Helpers.Macros.GetSafeParamInt(macroParams, "myParam");
+    //var myOtherParam = Dragonfly.Umbraco8Helpers.Macros.GetSafeParamInt(macroParams, "myOtherParam");
+
+    //Code here to do stuff...
+    var someModelData = new object();
+
+}
+
+
+@*//You can call other Themed partials as well...*@
+@Html.ThemedPartial(thisTheme, "MyPartial", someModelData)
+
+
+

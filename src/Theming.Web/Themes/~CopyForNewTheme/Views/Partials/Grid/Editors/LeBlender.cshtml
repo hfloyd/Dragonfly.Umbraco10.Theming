@@ -1,0 +1,17 @@
+﻿@using System.Web.Mvc.Html;
+@using Dragonfly.UmbracoTheming
+
+@{
+    var finalViewPath = ViewData["frontView"].ToString();
+
+    //Support Theming of Widgets
+    var themeName = ViewBag.CurrentThemeName;
+    if (themeName != "")
+    {
+        var viewFileName = ViewData["editorAlias"].ToString();
+
+        finalViewPath = ThemeHelper.GetFinalThemePath(themeName, ThemeHelper.PathType.GridEditor, viewFileName);
+    }
+}
+
+@(Html.Action("RenderEditor", "LeBlender", new { editorAlias = ViewData["editorAlias"], frontView = finalViewPath, model = Model }))

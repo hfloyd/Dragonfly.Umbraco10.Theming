@@ -1,0 +1,63 @@
+﻿@using System.Web.Mvc.Html;
+@using Dragonfly.UmbracoTheming
+@using Lecoati.LeBlender.Extension
+@using Lecoati.LeBlender.Extension.Models
+
+@try
+{
+    var finalViewPath = "/App_Plugins/LeBlender/editors/leblendereditor/views/LeBlender.cshtml";
+
+    //Support Theming of Widgets
+    var themeName = ViewBag.CurrentThemeName;
+    if (themeName != "")
+    {
+        var viewFileName = "LeBlender";
+
+        finalViewPath = ThemeHelper.GetFinalThemePath(themeName, ThemeHelper.PathType.GridEditor, viewFileName, "/App_Plugins/LeBlender/editors/leblendereditor/views/LeBlender.cshtml");
+    }
+
+    string guid = Model.guid != null && Model.guid.Value != null ? Model.guid.Value.ToString() : "";
+    LeBlenderModel blenderModel = Helper.DeserializeBlenderModel(Model);
+
+    var frontView = Model.editor.config == null || Model.editor.config.frontView == null || String.IsNullOrEmpty(Model.editor.config.frontView.Value) ?
+        "" : Model.editor.config.frontView.Value;
+
+
+
+    if (ViewData.Keys.Contains("editorAlias"))
+    {
+        ViewData.Remove("editorAlias");
+    }
+
+    if (ViewData.Keys.Contains("frontView"))
+    {
+        ViewData.Remove("frontView");
+    }
+
+    ViewDataDictionary datas = new ViewDataDictionary(this.ViewData) { { "editorAlias", Model.editor.alias }, { "frontView", frontView } };
+
+    int cacheExpiration = Helper.GetCacheExpiration(Model.editor.alias.ToString());
+
+    if (cacheExpiration > 0 && Helper.IsFrontEnd())
+    {
+        <text>
+            @Html.LeBlenderCachedPartial(finalViewPath, blenderModel, cacheExpiration, guid, datas)
+        </text>
+    }
+    else
+    {
+        <text>
+            @Html.Partial(finalViewPath, blenderModel, datas)
+        </text>
+    }
+
+}
+catch (Exception ex)
+{
+    if (!Helper.IsFrontEnd())
+    {
+        <p class="red">Something went wrong with this editor, below is the exception detail:</p>
+    }
+    <p class="leblender-exception">@Helper.GetInnerMessage(ex)</p>
+} 
+

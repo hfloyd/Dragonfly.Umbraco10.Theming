@@ -1,0 +1,21 @@
+﻿@using Umbraco.Web
+@using Umbraco.Web.Mvc
+@using Umbraco.Core.Models.PublishedContent
+@using Dragonfly.Umbraco8Theming
+
+@inherits UmbracoViewPage<IPublishedContent>
+@{
+    Layout = "Master.cshtml";
+}
+
+@section HeadScripts
+    {
+    @RenderSection("HeadScripts", required: false)
+}
+
+@section FooterScripts
+    {
+    @RenderSection("FooterScripts", required: false)
+}
+
+@RenderBody()

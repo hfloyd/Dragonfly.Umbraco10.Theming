@@ -1,0 +1,52 @@
+﻿@using Dragonfly.UmbracoTheming
+@using Umbraco.Web.Templates
+@model dynamic
+
+@try
+{
+    var themeName = ViewBag.CurrentThemeName;
+    string editor = EditorView(Model, themeName);
+    <text>@Html.Partial(editor, (object)Model)</text>
+}
+catch (Exception ex)
+{
+<pre>@ex.ToString()</pre>
+}
+
+@functions {
+    public static string EditorView(dynamic contentItem, string ThemeName)
+    {
+        //Support Theming of Widgets
+
+        //Standard view path
+        string view = contentItem.editor.render != null ? contentItem.editor.render.ToString() : contentItem.editor.view.ToString();
+        view = view.ToLower().Replace(".html", ".cshtml");
+
+        if (!view.Contains("/"))
+        {
+            view = "grid/editors/" + view;
+        }
+
+        //Check for themed grid editor file
+        if (ThemeName != "")
+        {
+            string viewFileName = Path.GetFileNameWithoutExtension(view);
+
+            //Special View Names
+            if (view.Contains("leblendereditor"))
+            {
+                viewFileName = "LeBlenderEditorBase";
+            }
+
+            string finalViewPath = ThemeHelper.GetFinalThemePath(ThemeName, ThemeHelper.PathType.GridEditor, viewFileName, view);
+
+            view = finalViewPath;
+
+            //"~/Views//app_plugins/leblender/editors/leblendereditor/views/base.cshtml.cshtml"
+        }
+
+
+        return view;
+    }
+
+}

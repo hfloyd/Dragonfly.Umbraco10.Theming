@@ -1,0 +1,1 @@
+This folder holds any default config files for all the Themes. These can be accessed via ThemeHelper.GetThemeConfigFilePath(). 
