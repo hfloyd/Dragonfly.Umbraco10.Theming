@@ -1,0 +1,32 @@
+{
+    "propertyEditors": [
+        {
+			"alias": "Dragonfly.Theming.ThemePicker",
+			"name": "Theme Picker",
+            "icon": "theme-brush",
+            "group": "Pickers",
+            "editor": {
+                "view": "~/App_Plugins/Dragonfly.UmbracoTheming/PropertyEditors/ThemePicker.html",
+                "hideLabel": false,
+                "valueType": "STRING"
+            }
+		},
+		{
+            "alias": "Dragonfly.Theming.CssOverridePicker",
+            "name": "Theme CSS Override Picker",
+            "icon": "theme-roller",
+            "group": "Pickers",
+            "editor": {
+                "view": "~/App_Plugins/Dragonfly.UmbracoTheming/PropertyEditors/CssOverridePicker.html",
+                "hideLabel": false,
+                "valueType": "STRING"
+            }
+        }
+    ],
+    
+    "javascript": [
+        //array of files we want to inject into the application on app_start    
+		'~/App_Plugins/Dragonfly.UmbracoTheming/PropertyEditors/themepicker.controller.js',
+		'~/App_Plugins/Dragonfly.UmbracoTheming/PropertyEditors/cssoverridepicker.controller.js'
+    ]
+}

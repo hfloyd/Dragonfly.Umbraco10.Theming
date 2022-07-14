@@ -1,0 +1,9 @@
+{
+    "Dragonfly": {
+        "Theming": {
+            "EnableDefaultThemeController": true,
+            "ThemePropertyAlias": "Theme",
+            "ThemesRootFolder": "~/Themes/"
+        }
+    }
+}

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
@@ -12,10 +12,10 @@
 
 	<!-- Package Description-->
 	<PropertyGroup>
-		<PackageId>Dragonfly.Umbraco10.Theming.Core</PackageId>
+		<PackageId>Dragonfly.Umbraco10.Theming.Web</PackageId>
 		<Title>Dragonfly Umbraco 10 Theming Core</Title>
 		<Product>Dragonfly Umbraco 10 Theming</Product>
-		<Description>A Theming system for Umbraco [.DLL ONLY (for class projects)] (min. Umbraco 10.0)</Description>
+		<Description>A Theming system for Umbraco [Full install for website] (min. Umbraco 10.0)</Description>
 
 		<PackageProjectUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</PackageProjectUrl>
 		<RepositoryType>GIT</RepositoryType>
@@ -81,6 +81,9 @@
 			<Pack>True</Pack>
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="App_Plugins\Dragonfly.UmbracoTheming\BackOffice\Icons\" />
 	</ItemGroup>
 	
 	<Import Project="..\Custom.targets" />

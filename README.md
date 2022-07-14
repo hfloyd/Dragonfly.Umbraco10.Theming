@@ -79,3 +79,12 @@ Example for a View:
     @Html.GetTypedGridHtml(Model.GridProperty, themeConfiguration.GridRenderer)
 
 This allows you to store the basic renderers all together outside of the Themes for reuse across Themes.
+
+## Changes from v7/v8 Version ##
+If you are updating an Umbraco site which was previously using Dragonfly Theming, there are a few things you might want to know that have changed.
+
+In terms of the code itself, there was some refactoring as well as bringing it into line with ASP.Net Core / Umbraco 10 best-practices (specifically better use of IoC Dependency Injection).
+
+Some things you will need to be aware of while updating your Themes, etc.:
+
+- The static "ThemeHelper" has been converted to a non-static "ThemeHelperService". You will need to inject it into your views like this: `@inject ThemeHelperService ThemeHelper` (Put this into "_ViewImports.cshtml" and you won't have to add it to every View manually.)
