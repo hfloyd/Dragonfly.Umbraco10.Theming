@@ -1,9 +1,7 @@
-﻿@using System.Web.Mvc
-@using Dragonfly.Umbraco8Theming
-@using Umbraco.Web
-@using Umbraco.Core.Models.PublishedContent
+﻿@using Dragonfly.UmbracoTheming
+@inject ThemeHelperService ThemeHelper
 
-@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@inherits Umbraco.Cms.Web.Common.Macros.PartialViewMacroPage
 @*
     Expected Parameters:
     -------------------
@@ -18,8 +16,9 @@
 
 @{
     var thisModel = Umbraco.AssignedContentItem;
-    var thisTheme = thisModel.Value<string>("SiteTheme", fallback: Fallback.ToAncestors);
-}
+    var thisTheme =  ThemeHelper.GetSiteThemeName(thisModel);
+	var vdd = new ViewDataDictionary(ViewData);
+    vdd.Add("MacroParams", Model.MacroParameters);
 }
 
-@Html.ThemedPartial(thisTheme, "Macro_BlogPosts_Latest", thisModel, new ViewDataDictionary { { "MacroParams", Model.MacroParameters } })
+@Html.ThemedPartial(ThemeHelper, thisTheme, "Macro_BlogPosts_Latest", thisModel, vdd)

@@ -5,7 +5,7 @@
 		<ContentTargetFolders>content</ContentTargetFolders>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
-		<ImplicitUsings>enable</ImplicitUsings>
+	<!--	<ImplicitUsings>enable</ImplicitUsings>-->
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
@@ -40,7 +40,7 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming</AssemblyName>
-		<Version>0.0.1</Version>
+		<Version>0.0.13</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 	</PropertyGroup>
@@ -70,9 +70,19 @@
 		</PackageReference>
 	</ItemGroup>
 	
-	<!--Include App_Plugins & targets file-->
+	<!--Include App_Plugins, Themes, Views & targets file-->
 	<ItemGroup>
-		<Content Include="App_Plugins\Dragonfly.Theming\**\*.*">
+		<Content Include="App_Plugins\Dragonfly.UmbracoTheming\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+			<Pack>True</Pack>
+		</Content>
+		<Content Include="Themes\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+			<Pack>True</Pack>
+		</Content>
+		<Content Include="Views\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
@@ -82,10 +92,16 @@
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
 	</ItemGroup>
+
+
 	<ItemGroup>
 	  <Folder Include="App_Plugins\Dragonfly.UmbracoTheming\BackOffice\Icons\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Theming.Core\Dragonfly.UmbracoTheming.Core.csproj" />
 	</ItemGroup>
 	
 	<Import Project="..\Custom.targets" />
 
+<!-- Excluded Files -->
 </Project>

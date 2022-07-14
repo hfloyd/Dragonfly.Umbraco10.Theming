@@ -1,18 +1,15 @@
-﻿@using Umbraco.Web
-@using Umbraco.Web.Mvc
-@using Umbraco.Core.Models.PublishedContent
-@using Dragonfly.Umbraco8Theming
-
-@inherits UmbracoViewPage<IPublishedContent>
+﻿@inherits UmbracoViewPage<IPublishedContent>
 @{
-    Layout = "Master.cshtml";
+    Layout = "_Master.cshtml";
 
-    var thisTheme = Model.Value<string>("Theme", fallback: Fallback.ToAncestors);
+    //Examples of Theming code
+    //var thisTheme = Model.Value<string>("Theme", fallback: Fallback.ToAncestors);
+	//var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+
     //var masterViewPath = ThemeHelper.GetThemeViewPath(thisTheme, "_Page");
     //Layout = masterViewPath;
+
 }
-@section HeadScripts { }
-@section FooterScripts { }
 
 
 @*//Page Content Here...*@

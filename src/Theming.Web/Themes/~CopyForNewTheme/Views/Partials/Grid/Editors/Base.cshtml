@@ -1,52 +1,42 @@
-﻿@using Dragonfly.UmbracoTheming
-@using Umbraco.Web.Templates
+﻿@inject ThemeHelperService ThemeHelper
 @model dynamic
 
 @try
 {
-    var themeName = ViewBag.CurrentThemeName;
-    string editor = EditorView(Model, themeName);
-    <text>@Html.Partial(editor, (object)Model)</text>
+	var themeName = ViewBag.CurrentThemeName;
+	string editor = EditorView(Model, themeName, ThemeHelper);
+	<text>@await Html.PartialAsync(editor, Model as object)</text>
 }
 catch (Exception ex)
 {
-<pre>@ex.ToString()</pre>
+	<pre>@ex.ToString()</pre>
 }
 
 @functions {
-    public static string EditorView(dynamic contentItem, string ThemeName)
-    {
-        //Support Theming of Widgets
+	public static string EditorView(dynamic contentItem, string ThemeName, ThemeHelperService ThemeHelper)
+	{
+		//Support Theming of Widgets
 
-        //Standard view path
-        string view = contentItem.editor.render != null ? contentItem.editor.render.ToString() : contentItem.editor.view.ToString();
-        view = view.ToLower().Replace(".html", ".cshtml");
+		//Standard view path
+		string view = contentItem.editor.render != null ? contentItem.editor.render.ToString() : contentItem.editor.view.ToString();
+		view = view.Replace(".html", ".cshtml");
 
-        if (!view.Contains("/"))
-        {
-            view = "grid/editors/" + view;
-        }
+		if (!view.Contains("/"))
+		{
+			view = "grid/editors/" + view;
+		}
 
-        //Check for themed grid editor file
-        if (ThemeName != "")
-        {
-            string viewFileName = Path.GetFileNameWithoutExtension(view);
+		//Check for themed grid editor file
+		if (ThemeName != "")
+		{
+			string viewFileName = view.Replace(".cshtml", "");
 
-            //Special View Names
-            if (view.Contains("leblendereditor"))
-            {
-                viewFileName = "LeBlenderEditorBase";
-            }
+			string finalViewPath = ThemeHelper.GetFinalThemePath(ThemeName, Theming.PathType.GridEditor, viewFileName, view);
 
-            string finalViewPath = ThemeHelper.GetFinalThemePath(ThemeName, ThemeHelper.PathType.GridEditor, viewFileName, view);
+			view = finalViewPath;
+		}
 
-            view = finalViewPath;
-
-            //"~/Views//app_plugins/leblender/editors/leblendereditor/views/base.cshtml.cshtml"
-        }
-
-
-        return view;
-    }
+		return view;
+	}
 
 }

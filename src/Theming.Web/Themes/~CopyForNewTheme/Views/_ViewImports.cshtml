@@ -1,0 +1,23 @@
+@using Microsoft.AspNetCore.Html;
+@*@using Microsoft.AspNetCore.Http*@
+@using Microsoft.Extensions.Logging;
+
+@using Smidge.Models;
+
+@using Umbraco.Extensions;
+@using Umbraco.Cms.Web.Common.Views;
+@using Umbraco.Cms.Core.Models.PublishedContent;
+@using Umbraco.Cms.Core.Models;
+
+@using Dragonfly.UmbracoHelpers;
+@using Dragonfly.UmbracoTheming;
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Smidge
+
+@inject Smidge.SmidgeHelper SmidgeHelper
+@inject ILogger<UmbracoViewPage> CurrentLogger
+@*@inject Microsoft.AspNetCore.Mvc.Routing.UrlHelper UrlHelper
+@inject Microsoft.AspNetCore.Http.HttpRequest Request*@
+
+@inject ThemeHelperService ThemeHelper

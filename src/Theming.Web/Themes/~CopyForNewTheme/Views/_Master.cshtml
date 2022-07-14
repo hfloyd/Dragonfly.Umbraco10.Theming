@@ -1,0 +1,105 @@
+﻿@inherits UmbracoViewPage<IPublishedContent>
+@{
+	Layout = null;
+
+	var currentPage = Model;
+	var thisTheme = Model.Value<string>("Theme", fallback: Fallback.ToAncestors);
+	var templateFilePath = ThemeHelper.GetThemeViewPath(thisTheme, Model.GetTemplateAlias());
+
+	//Examples of Bundling using Smidge
+	SmidgeHelper //.CreateCssBundle("master-css-bundle")
+		.RequiresCss(new CssFile("~/css/lib/bootstrap.min.css") { Order = 1 }) //Shared file
+		.RequiresCss(new CssFile(ThemeHelper.GetThemedCssFile(thisTheme, "style.css")) { Order = 2 }); //Single Theme-specific file
+
+	SmidgeHelper.CreateJsBundle("head-js-bundle")
+		.RequiresJs(new JavaScriptFile("~/scripts/lib/jquery.js") { Order = 1 }); //Shared file
+
+	SmidgeHelper.CreateJsBundle("footer-js-bundle")
+		.RequiresJs(new JavaScriptFile("~/scripts/lib/bootstrap.min.js") { Order = 1 }) //Shared file
+		.RequiresJs(ThemeHelper.GetThemedJsFolder(thisTheme)); //Get the entire JS folder for the Theme
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- General Meta tags -->
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+	<title>MetaTitle</title>
+	<meta name="description" content="MetaDescription">
+
+	<link rel="shortcut icon" href="@Url.ThemedAsset(ThemeHelper, thisTheme, "images/favicon.ico")">
+
+	<!-- Site-wide CSS -->
+	<!-- Example of single themed file -->
+	<link rel="stylesheet" href="@Url.ThemedAsset(ThemeHelper, thisTheme, "css/custom.css")" />
+
+	<!-- Example of using Smidge bundles -->
+	<environment names="Development">
+		@await SmidgeHelper.CssHereAsync(debug: true)
+	</environment>
+	<environment exclude="Development">
+		@await SmidgeHelper.CssHereAsync(debug: false)
+	</environment>
+
+
+	<!-- Site-wide HEAD Js -->
+	<!-- Example of single themed file -->
+	<script src="@Url.ThemedAsset(ThemeHelper,thisTheme, "js/myscript.js")"></script>
+	<!-- Example of using Smidge bundles -->
+	<environment names="Development">
+		@await SmidgeHelper.JsHereAsync("head-js-bundle",debug: true)
+	</environment>
+	<environment exclude="Development">
+		@await SmidgeHelper.JsHereAsync("head-js-bundle",debug: false)
+	</environment>
+	@RenderSection("HeadScripts", required: false)
+
+</head>
+
+<body class="BodyCss">
+	<!-- PageType: @currentPage.ContentType.Alias -->
+	@if (templateFilePath.StartsWith("~/Views"))
+	{
+		var themeFolder = ThemeHelper.GetThemePath(thisTheme) + "Views/";
+		var templateName = templateFilePath.Replace("~/Views/", "");
+		<!--Customize by creating a Template file named '@templateName' at '@themeFolder'-->
+	}
+	else
+	{
+		<!--Customize this Template at '@templateFilePath'-->
+	}
+
+
+	<div class="page">
+		<div class="wrap">
+			<header>
+				<a href="Site.Url" class="logo pull-left">Home</a>
+				@Html.ThemedPartial(ThemeHelper, thisTheme, "Nav_Main", Model)
+			</header>
+
+			<p><b>NOTE:</b> All Site Design Templates should be created in the appropriate '/Themes/' folder.</p>
+
+			@RenderBody() @*CHILD TEMPLATE BODY HERE*@
+
+		</div>
+
+		<footer>
+			<div class="container">
+				@Html.ThemedPartial(ThemeHelper,thisTheme, "Nav_Footer", Model)
+			</div>
+		</footer>
+	</div>
+
+	<!-- Page Footer Script Section Start -->
+	<environment names="Development">
+		@await SmidgeHelper.JsHereAsync( "footer-js-bundle",debug: true)
+	</environment>
+	<environment exclude="Development">
+		@await SmidgeHelper.JsHereAsync( "footer-js-bundle", debug: false)
+	</environment>
+
+	@RenderSection("FooterScripts", required: false)
+</body>
+</html>

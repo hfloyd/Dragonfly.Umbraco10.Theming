@@ -1,5 +1,4 @@
 ﻿#pragma warning disable 1591
-
 namespace Dragonfly.UmbracoTheming
 {
     using Microsoft.Extensions.Configuration;
@@ -11,16 +10,6 @@ namespace Dragonfly.UmbracoTheming
 
     public class SetupComposer : IComposer
     {
-        private readonly ILogger<SetupComposer> _logger;
-        private readonly IConfiguration _AppSettingsConfig;
-        public SetupComposer(
-            ILogger<SetupComposer> logger,
-            IConfiguration AppSettingsConfig
-            )
-        {
-            _logger = logger;
-            _AppSettingsConfig = AppSettingsConfig;
-        }
         public void Compose(IUmbracoBuilder builder)
         {
             // builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -37,9 +26,12 @@ namespace Dragonfly.UmbracoTheming
             //  builder.Services.AddScoped<IViewRenderService, Dragonfly.NetHelperServices.ViewRenderService>();
             // builder.Services.AddScoped<Dragonfly.UmbracoServices.FileHelperService>();
 
+            var logger = builder.BuilderLoggerFactory.CreateLogger("SetupComposer");
+
             builder.Services.AddScoped<DependencyLoader>();
             builder.Services.AddScoped<ThemeHelperService>();
-            CheckAddThemeBootstrapper(builder, _AppSettingsConfig);
+
+            CheckAddThemeBootstrapper(builder);
 
             //builder.AddUmbracoOptions<Settings>();
 
@@ -50,22 +42,24 @@ namespace Dragonfly.UmbracoTheming
         /// set the default RenderController to be the Theme Controller.
         /// This will allow us to set the theme templates automatically.
         /// </summary>
-        public void CheckAddThemeBootstrapper(IUmbracoBuilder builder, IConfiguration AppSettingsConfig)
+        public void CheckAddThemeBootstrapper(IUmbracoBuilder builder)
         {
-            var useDefaultThemeController = AppSettingsConfig["Dragonfly.Theming.EnableDefaultThemeController"];
-            if (useDefaultThemeController != null)
+            var options = new DragonflyThemingConfig();
+            builder.Config.GetSection(DragonflyThemingConfig.DragonflyTheming).Bind(options);
+  
+            var useDefaultThemeController = options.EnableDefaultThemeController;
+          
+            if (useDefaultThemeController)
             {
-                if (useDefaultThemeController.ToLower() == "true")
+                // Configure Umbraco Render Controller Type
+                builder.Services.Configure<UmbracoRenderingDefaultsOptions>(c =>
                 {
-                    // Configure Umbraco Render Controller Type
-                    builder.Services.Configure<UmbracoRenderingDefaultsOptions>(c =>
-                    {
-                        c.DefaultControllerType = typeof(DefaultThemeController);
-                    });
-                    // builder.SetDefaultRenderMvcController(typeof(DefaultThemeController));
-                    _logger.LogInformation("Default Controller set to 'DefaultThemeController'");
-                }
+                    c.DefaultControllerType = typeof(DefaultThemeController);
+                });
+                var logger = builder.BuilderLoggerFactory.CreateLogger("SetupComposer");
+                logger.Log(LogLevel.Information,"Dragonfly DefaultThemeController set");
             }
+     
         }
     }
 

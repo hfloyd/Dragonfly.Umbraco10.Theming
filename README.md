@@ -23,53 +23,111 @@ GitHub Repository: [https://github.com/hfloyd/Dragonfly.Umbraco10.Theming](https
 ## Setup ##
 On your root Document Type, use the included "Theme Picker" Property Type to add a property for the site's chosen theme. 
 
-*NOTE: This documentation has not yet been updated for Umbraco 10... Please stand by....* 
+
+In appSettings.json add this section at the root-level (aka a sibling of 'Umbraco', not a child):
+
+    "DragonflyTheming": {
+		"ThemesRootFolder": "~/Themes",
+    	"ThemePickerPropertyAlias": "Theme",
+ 		"CssFilePickerPropertyAlias": "SiteCss",
+    	"EnableDefaultThemeController": false,
+    	"FallbackAssetsCssFolder": "~/css",
+        "ThemedAssetsCssFolder": "Css",
+        "FallbackAssetsJsFolder": "~/scripts",
+        "ThemedAssetsJsFolder": "Js"
+    }
+
 
 The Controller which runs for each page request needs to determine the Themed View file to render the page with, so if you already have custom controllers operating in your site, be sure to include something that will route the theme correctly. For example:
 
-	using System.Web.Mvc;
-	using Umbraco.Web;
-	using Umbraco.Web.Models;
-	using Umbraco.Web.Mvc;
-	
-	namespace Dragonfly.Umbraco8Theming
+	namespace MySite
 	{
+	    using Microsoft.AspNetCore.Mvc;
+	    using Microsoft.AspNetCore.Mvc.ViewEngines;
+	    using Microsoft.Extensions.Logging;
+	    using Umbraco.Cms.Core.Models;
+	    using Umbraco.Cms.Core.Web;
+	    using Umbraco.Cms.Web.Common.Controllers;
+	    using Umbraco.Extensions;
+	
 	    /// <summary>
 	    /// Find the theme setting and retrieve the appropriate view
 	    /// </summary>
-	    public class DefaultThemeController : RenderMvcController
+	    public class DefaultController : RenderController
 	    {
-			private readonly ILogger _logger;
-
-			public DefaultThemeController(ILogger logger)
-			{
-				_logger = logger;
-			}
-
-	        // GET: Default
-	        public ActionResult Index(ContentModel model)
-	        {
-	            var currentTemplateName = model.Content.GetTemplateAlias();
-	            var siteTheme = model.Content.AncestorOrSelf(1).Value<string>("Theme");
-	            var templatePath = ThemeHelper.GetFinalThemePath(siteTheme, ThemeHelper.PathType.View, currentTemplateName);
+	        private readonly ILogger _logger;
+	        private readonly ThemeHelperService _ThemeHelperService;        
 	
-	            return View(templatePath, model);
+	        public DefaultController(
+	            ILogger<DefaultThemeController> logger,
+	            ThemeHelperService themeHelperService,
+	            ICompositeViewEngine compositeViewEngine,
+	            IUmbracoContextAccessor umbracoContextAccessor)
+	        : base(logger, compositeViewEngine, umbracoContextAccessor)
+	        {
+	            _logger = logger;
+	            _ThemeHelperService = themeHelperService;
+	        }
+	
+	        // GET: Default
+	        public IActionResult Index(ContentModel model)
+	        {
+	            var themeProp = _ThemeHelperService.ThemePropertyAlias();
+	
+	            if (!string.IsNullOrEmpty(themeProp))
+	            {
+	                var currentTemplateName = model.Content.GetTemplateAlias();
+	
+	                //Set logic to get the node which has the Theme Picker on it
+	                var rootNode = model.Content.AncestorOrSelf(1);
+	                if (rootNode != null)
+	                {
+	                    var siteTheme = rootNode.Value<string>(themeProp);
+	                    if (string.IsNullOrEmpty(siteTheme))
+	                    {
+	                        _logger.LogWarning($"Node '{rootNode.Name}' does not have a value for Theme picker property '{themeProp}'.");
+	                        return base.CurrentTemplate(model);
+	                    }
+	                    else
+	                    {
+	                        var templatePath =
+	                            _ThemeHelperService.GetFinalThemePath(siteTheme, Theming.PathType.View, currentTemplateName);
+	                        return View(templatePath, model);
+	                    }
+	                }
+	                else
+	                {
+	                    _logger.LogWarning($"DefaultController: Root Node is NULL for node #{model.Content.Id}");
+	                    return base.CurrentTemplate(model);
+	                }
+	            }
+	            else
+	            {
+	                _logger.LogWarning($"AppSetting 'DragonflyTheming.ThemePickerPropertyAlias' is not set.");
+	                return base.CurrentTemplate(model);
+	            }
 	        }
 	    }
 	}
 
-If you are not using any custom controllers, you can enable the 'DefaultThemeController' via the addition of two Web.config entries:
 
-	<add key="Dragonfly.EnableDefaultThemeController" value="true" />
-	<add key="Dragonfly.ThemePropertyAlias" value="Theme" />
+If you are not using any custom controllers, you can enable the 'DefaultThemeController' via the appSettings entries:
 
-## Theme Configuration ##
+    "DragonflyTheming": {
+		...
+    	"ThemePickerPropertyAlias": "Theme",
+    	"EnableDefaultThemeController": true
+		...
+    }
+
+
+## Individual Theme Configuration ##
 
 You can store information about the Theme in an XML 'Theme.config' file. See the [example config](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming/blob/master/src/Dragonfly/Themes/%7ECopyForNewTheme/Theme.config) for format.
 
 If the file doesn't exist in a Theme, a default one will be created automatically.
 
-This is most useful to store information about the GridRenderer used for the Theme - in the event that different Themes use different rendering files.
+This is most useful for storing information about the GridRenderer used for the Theme - in the event that different Themes use different rendering files.
 
 Example for a View:
     
@@ -80,11 +138,52 @@ Example for a View:
 
 This allows you to store the basic renderers all together outside of the Themes for reuse across Themes.
 
-## Changes from v7/v8 Version ##
+
+## Theme Conventions ##
+
+Any folder in the root "Themes" folder will have its name uses as an available Theme, except for folders which start with a tilda (~), which will be ignored by the Theme Picker.
+
+Any css file in the "Themes/~CssOverrides" folder will be available in the CSS Picker.
+
+### Views ###
+The Views folder in your Theme is where all customized View files should go. Just like in the main Umbraco-provided Views folder, you can have a "Partials" subfolder, etc. When a page is routed to its View, the Theme folder will be checked first, and if a matching file is not found there, it will default to the file in the primary Views folder (so make sure **all** your templates do have a file in the primary Views folder - even if it is blank).
+
+### Assets ###
+
+You can organize your assets folder however you like, but keep in mind that certain ThemeHelper functions rely upon knowing where the CSS and JS files are located. If you can standardize across all your themes, and make sure the AppSettings reflects your folder structure, that would be best. The config values represent the path once inside the '/MY_THEME/Assets/' folder:
+
+    "DragonflyTheming": {
+		...
+		"ThemedAssetsCssFolder": "css",
+        "ThemedAssetsJsFolder": "js"
+		...
+    }
+
+If you have shared CSS/JS files (such as libraries, CSS frameworks, etc.) you can use web root relative folders (such as the Umbraco defaults "css" and "scripts" - which are available in the back-office) to hold those files, and reference them directly in your themed templates. 
+
+You can also have default fallback versions of certain CSS/JS files in the shared folders, if desired. Just make sure the config knows about your defaults:
+
+    "DragonflyTheming": {
+		...
+		"FallbackAssetsCssFolder": "~/css",
+        "FallbackAssetsJsFolder": "~/scripts",
+        ...
+    }
+
+### Config Files ###
+
+If you have theme-specific configuration files of whatever type, they can be added to a Theme folder in a subfolder named "Configs". You should also provide a default fall-back version of any config file you plan to call in a folder in the "Themes" root named "~DefaultConfigs".
+
+You can get either the current theme's config file, or the default, if none exists in the current theme in your custom code using `GetFinalThemePath()` with `Theming.PathType.Configs` (or use the shortcut - `GetThemedConfigFilePath()`).
+
+## Changes from v7/v8 Version to v10 Version##
 If you are updating an Umbraco site which was previously using Dragonfly Theming, there are a few things you might want to know that have changed.
 
-In terms of the code itself, there was some refactoring as well as bringing it into line with ASP.Net Core / Umbraco 10 best-practices (specifically better use of IoC Dependency Injection).
+In terms of the code itself, there was some refactoring as well as bringing it into line with ASP.Net Core / Umbraco 10 best-practices (specifically better use of IoC / Dependency Injection). I've also added many more configurations for things which were otherwise hard-coded (such as folder locations, etc.).
 
-Some things you will need to be aware of while updating your Themes, etc.:
+Some things you will need to be aware of while updating your Themes and any custom code for v10:
 
 - The static "ThemeHelper" has been converted to a non-static "ThemeHelperService". You will need to inject it into your views like this: `@inject ThemeHelperService ThemeHelper` (Put this into "_ViewImports.cshtml" and you won't have to add it to every View manually.)
+- The HtmlHelpers and UrlHelpers have been moved to their own static Extensions class, so they are available as before, except you will now need to pass in the ThemeHelperService. ex: `@Url.ThemedAsset(ThemeHelper, thisTheme, "images/favicon.ico")`
+- The HtmlHelpers `RequiresThemedCss(}`, `RequiresThemedJs()`, `RequiresThemedCssFolder()`, and `RequiresThemedJsFolder()` have been removed, since ClientDependency has been swapped out for Smidge. Take a look at the provided "_Master.cshtml" file (in the "Themes/~CopyForNewTheme/Views" folder) for example code using Smidge. You can also use whatever bundling framework you prefer, since now helpers are available to return themed file and folder paths.
+- All the included example Razor files have been updated as well, so if you are confused about anything, take a look at the contents of the "Themes/~CopyForNewTheme" folder, as well as "/Views/Partials/Grid/Bootstrap3WithTheming.cshtml" and "/Views/MacroPartials/~ExampleThemedMacro.cshtml"

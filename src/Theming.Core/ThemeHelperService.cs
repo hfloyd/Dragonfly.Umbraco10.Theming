@@ -1,17 +1,17 @@
 ﻿namespace Dragonfly.UmbracoTheming
 {
     using System;
+    using System.IO;
     using System.Xml.Serialization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Html;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.AspNetCore.Mvc.Routing;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using Umbraco.Cms.Core.Models.PublishedContent;
     using Umbraco.Extensions;
-
 
     public class ThemeHelperService
     {
@@ -19,10 +19,12 @@
         private readonly IConfiguration _AppSettingsConfig;
         private readonly IWebHostEnvironment _HostingEnvironment;
 
+        private readonly DragonflyThemingConfig _ConfigOptions;
+
         /// <summary>
-        /// Cached instance of configuration
+        /// Cached instance of current Theme configuration
         /// </summary>
-        private ThemeConfig _config;
+        private ThemeConfig _ThemeConfig;
 
 
         //private readonly ThemeConfigurator _ThemeConfigurator;        
@@ -35,14 +37,24 @@
             _logger = logger;
             _AppSettingsConfig = AppSettingsConfig;
             _HostingEnvironment = HostingEnvironment;
+
+            _ConfigOptions = GetAppDataConfig();
         }
 
-        #region Public Properties/Methods
+        #region Public Methods
 
+        public DragonflyThemingConfig ThemingConfigOptions()
+        {
+            return _ConfigOptions;
+        }
+
+        /// <summary>
+        /// Property Alias for Theme Picker property (from AppSettings)
+        /// </summary>
+        /// <returns></returns>
         public string ThemePropertyAlias()
         {
-            var themeProp = _AppSettingsConfig["Dragonfly.Theming.ThemePropertyAlias"];
-
+            var themeProp = _ConfigOptions.ThemePropertyAlias;
             if (!string.IsNullOrEmpty(themeProp))
             {
                 return themeProp;
@@ -50,6 +62,23 @@
             else
             {
                 return "Theme"; //default
+            }
+        }
+
+        /// <summary>
+        /// Property Alias for CSS Picker property (from AppSettings)
+        /// </summary>
+        /// <returns></returns>
+        public string CssPropertyAlias()
+        {
+            var cssProp = _ConfigOptions.CssFilePickerPropertyAlias;
+            if (!string.IsNullOrEmpty(cssProp))
+            {
+                return cssProp;
+            }
+            else
+            {
+                return "SiteCss"; //default
             }
         }
 
@@ -79,37 +108,16 @@
         /// <returns></returns>
         public ThemeConfig GetThemeConfig(string ThemeName)
         {
-            string path = GetConfigFilePath(ThemeName);
+            string path = GetThemeConfigFilePath(ThemeName);
             var lastModified = System.IO.File.GetLastWriteTime(path);
 
-            if (_config.ThemeName != ThemeName ||
-                (_config.ThemeName == ThemeName && lastModified > _config.ConfigTimestamp))
+            if (_ThemeConfig.ThemeName != ThemeName ||
+                (_ThemeConfig.ThemeName == ThemeName && lastModified > _ThemeConfig.ConfigTimestamp))
             {
                 SetThemeConfig(ThemeName);
             }
 
-            return _config;
-        }
-
-        /// <summary>
-        /// Determine if the Theme has a themed Umbraco Forms file
-        /// </summary>
-        /// <param name="SiteThemeName">Theme name</param>
-        /// <param name="ViewPath">Final part of view path - ex: 'Form.cshtml' or 'Fieldtypes/FieldType.Text.cshtml'</param>
-        /// <returns>True if file found</returns>
-        public bool HasUmbracoFormsThemeFile(string SiteThemeName, string ViewPath = "")
-        {
-            var baseThemePath = string.Format("~/Themes/{0}", SiteThemeName);
-            var themePath = string.Format("{0}/Views/Partials/Forms/Themes/default/{1}", baseThemePath, ViewPath);
-
-            if (System.IO.File.Exists(_HostingEnvironment.MapPathWebRoot(themePath)))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _ThemeConfig;
         }
 
         /// <summary>
@@ -120,52 +128,48 @@
         /// <param name="FileName">Name of the View (without extension) or name of the config (with extension) (optional)</param>
         /// <param name="AlternateStandardPath">If the non-themed path is not standard, provide the full path here (optional)</param>
         /// <returns></returns>
-        public string GetFinalThemePath(string SiteThemeName, Theming.PathType PathType, string FileName = "", string AlternateStandardPath = "")
+        public string GetFinalThemePath(string SiteThemeName, Theming.PathType PathType, string ViewOrFileName = "", string AlternateStandardPath = "")
         {
-            if (SiteThemeName.IsNullOrWhiteSpace())
-            {
-                throw new InvalidOperationException("Missing SiteThemeName parameter: No theme has been set for this website root, republish the root with a selected theme.");
-            }
-
             var finalPath = "";
             var standardPath = "";
             var themePath = "";
             var isFolder = false;
 
-            var baseThemePath = string.Format("~/Themes/{0}", SiteThemeName);
+            var baseThemePath = GetThemeRootPath(SiteThemeName);
+            var viewName = Path.GetFileNameWithoutExtension(ViewOrFileName);
 
             switch (PathType)
             {
                 case Theming.PathType.ThemeRoot:
                     standardPath = themePath;
-                    themePath = string.Format("{0}/", baseThemePath);
+                    themePath = baseThemePath;
                     isFolder = true;
                     break;
 
                 case Theming.PathType.Configs:
-                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : string.Format("~/Themes/~DefaultConfigs/{0}", FileName);
-                    themePath = string.Format("{0}/Configs/{1}", baseThemePath, FileName);
+                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"{_ConfigOptions.ThemesRootFolder.EnsureEndsWith('/')}~DefaultConfigs/{ViewOrFileName}";
+                    themePath = $"{baseThemePath}Configs/{ViewOrFileName}";
                     break;
 
                 case Theming.PathType.View:
-                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : string.Format("~/Views/{0}.cshtml", FileName);
-                    themePath = string.Format("{0}/Views/{1}.cshtml", baseThemePath, FileName);
+                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/{viewName}.cshtml";
+                    themePath = $"{baseThemePath}Views/{viewName}.cshtml";
                     break;
 
                 case Theming.PathType.PartialView:
-                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : string.Format("~/Views/Partials/{0}.cshtml", FileName);
-                    themePath = string.Format("{0}/Views/Partials/{1}.cshtml", baseThemePath, FileName);
+                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/Partials/{viewName}.cshtml";
+                    themePath = $"{baseThemePath}Views/Partials/{viewName}.cshtml";
                     break;
 
-                case Theming.PathType.FormsPartialsRoot:
-                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : string.Format("~/Views/Partials/Forms/Themes/default/");
-                    themePath = string.Format("{0}/Views/Partials/Forms/Themes/default/", baseThemePath);
+                case Theming.PathType.FormsThemesRoot:
+                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/Partials/Forms/Themes/";
+                    themePath = $"{baseThemePath}Views/Partials/Forms/Themes/";
                     isFolder = true;
                     break;
 
                 case Theming.PathType.GridEditor:
-                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : string.Format("~/Views/Partials/Grid/Editors/{0}.cshtml", FileName);
-                    themePath = string.Format("{0}/Views/Partials/Grid/Editors/{1}.cshtml", baseThemePath, FileName);
+                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/Partials/Grid/Editors/{viewName}.cshtml";
+                    themePath = $"{baseThemePath}Views/Partials/Grid/Editors/{viewName}.cshtml";
                     break;
 
                 default:
@@ -235,6 +239,11 @@
             return path;
         }
 
+        /// <summary>
+        /// Returns a file from the '~CssOverrides' folder (Themes root as configured in the AppSettings)
+        /// </summary>
+        /// <param name="CssOverrideFileName">Name of the CSS file</param>
+        /// <returns></returns>
         public string GetCssOverridePath(string CssOverrideFileName)
         {
             if (CssOverrideFileName.IsNullOrWhiteSpace())
@@ -243,23 +252,186 @@
             }
             else
             {
-                var path = "/Themes/~CssOverrides/{0}";
-                return string.Format(path, CssOverrideFileName);
+                var rootThemesPath = _ConfigOptions.ThemesRootFolder.EnsureEndsWith('/');
+                var path = $"{rootThemesPath}~CssOverrides/{CssOverrideFileName.EnsureEndsWith(".css")}";
+                return path;
             }
 
         }
+
+        /// <summary>
+        /// Returns a file from the Theme's Assets folder 
+        /// </summary>
+        /// <param name="SiteThemeName"></param>
+        /// <param name="RelativeAssetPath">Path to file inside [theme]/Assets/ folder</param>
+        /// <returns>String representing the file path</returns>
+        public string GetThemedAssetFile(string SiteThemeName, string RelativeAssetPath)
+        {
+            var themeRoot = GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeRoot);
+            var absolutePath = themeRoot.EnsureEndsWith('/');
+            var virtualPath = absolutePath + "Assets/" + RelativeAssetPath;
+            return virtualPath;
+        }
+
+        /// <summary>
+        /// Get the path to an Assets subfolder for the Theme
+        /// </summary>
+        /// <param name="SiteThemeName"></param>
+        /// <param name="RelativeAssetFolderPath">Path to folder inside [theme]/Assets/ folder</param>
+        /// <returns></returns>
+        public string GetThemedAssetFolder(string SiteThemeName, string RelativeAssetFolderPath)
+        {
+            var themeRoot = GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeRoot);
+            var absolutePath = themeRoot.EnsureEndsWith('/');
+            var virtualPath = absolutePath + "Assets/" + RelativeAssetFolderPath.EnsureEndsWith('/');
+            return virtualPath;
+        }
+
+        /// <summary>
+        /// Get the path to the Css Assets folder for the Theme
+        /// </summary>
+        /// <param name="SiteThemeName"></param>
+        /// <returns></returns>
+        public string GetThemedCssFolder(string SiteThemeName)
+        {
+            var themeFolderConfig = _ConfigOptions.ThemedAssetsCssFolder;
+            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig).EnsureEndsWith('/');
+            return themedFolder;
+        }
+
+        /// <summary>
+        /// Get the path to the JavaScript Assets folder for the Theme
+        /// </summary>
+        /// <param name="SiteThemeName"></param>
+        /// <returns></returns>
+        public string GetThemedJsFolder(string SiteThemeName)
+        {
+            var themeFolderConfig = _ConfigOptions.ThemedAssetsJsFolder;
+            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig).EnsureEndsWith('/');
+            return themedFolder;
+        }
+
+        /// <summary>
+        /// Returns a themed CSS file, with optional fallback to default css folder
+        /// </summary>
+        /// <param name="SiteThemeName"></param>
+        /// <param name="CssFileName"></param>
+        /// <param name="UseFallback">Set to FALSE to NOT check for a fallback default file</param>
+        /// <returns></returns>
+        public string GetThemedCssFile(string SiteThemeName, string CssFileName, bool UseFallback = true)
+        {
+            var themeFolderConfig = _ConfigOptions.ThemedAssetsCssFolder;
+            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig).EnsureEndsWith('/');
+            var themedFilePath = $"{themedFolder}{CssFileName.EnsureEndsWith(".css")}";
+
+            if (!UseFallback)
+            {
+                return themedFilePath;
+            }
+            else
+            {
+                //Check for file existence
+                if (System.IO.File.Exists(_HostingEnvironment.MapPathWebRoot(themedFilePath)))
+                {
+                    return themedFilePath;
+                }
+                else
+                {
+                    var defaultFolderPath = _ConfigOptions.FallbackAssetsCssFolder;
+                    var defaultFilePath = $"{GetNonThemedFolder(defaultFolderPath)}{CssFileName.EnsureEndsWith(".css")}";
+                    return defaultFilePath;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns a themed JavaScript file, with optional fallback to default Js folder
+        /// </summary>
+        /// <param name="SiteThemeName"></param>
+        /// <param name="JsFileName"></param>
+        /// <param name="UseFallback">Set to FALSE to NOT check for a fallback default file</param>
+        /// <returns></returns>
+        public string GetThemedJsFile(string SiteThemeName, string JsFileName, bool UseFallback = true)
+        {
+            var themeFolderConfig = _ConfigOptions.ThemedAssetsJsFolder;
+            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig).EnsureEndsWith('/');
+            var themedFilePath = $"{themedFolder}{JsFileName.EnsureEndsWith(".js")}";
+
+            if (!UseFallback)
+            {
+                return themedFilePath;
+            }
+            else
+            {
+                //Check for file existence
+                if (System.IO.File.Exists(_HostingEnvironment.MapPathWebRoot(themedFilePath)))
+                {
+                    return themedFilePath;
+                }
+                else
+                {
+                    var defaultFolderPath = _ConfigOptions.FallbackAssetsJsFolder;
+                    var defaultFilePath = $"{GetNonThemedFolder(defaultFolderPath)}{JsFileName.EnsureEndsWith(".js")}";
+                    return defaultFilePath;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determine if the Theme has a themed Umbraco Forms file
+        /// </summary>
+        /// <param name="SiteThemeName">Theme name</param>
+        /// <param name="ViewPath">Final part of view path - ex: 'Form.cshtml' or 'Fieldtypes/FieldType.Text.cshtml'</param>
+        /// <param name="FormsThemeName">Name of the Forms Theme ('default' if blank)</param>
+        /// <returns>True if file found</returns>
+        public bool HasUmbracoFormsThemeFile(string SiteThemeName, string ViewPath = "", string FormsThemeName = "default")
+        {
+            var baseThemePath = GetThemeRootPath(SiteThemeName);
+            var themePath = $"{baseThemePath}Views/Partials/Forms/Themes/{FormsThemeName}/{ViewPath}";
+
+            if (System.IO.File.Exists(_HostingEnvironment.MapPathWebRoot(themePath)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
         #endregion
 
         #region Private Methods
 
+        private DragonflyThemingConfig GetAppDataConfig()
+        {
+            var options = new DragonflyThemingConfig();
+            _AppSettingsConfig.GetSection(DragonflyThemingConfig.DragonflyTheming).Bind(options);
+
+            return options;
+        }
+
+        private string GetThemeRootPath(string SiteThemeName)
+        {
+            if (SiteThemeName.IsNullOrWhiteSpace())
+            {
+                throw new InvalidOperationException("Missing SiteThemeName parameter: No theme has been set for this website root, republish the root with a selected theme.");
+            }
+
+            var themesRoot = _ConfigOptions.ThemesRootFolder.EnsureEndsWith('/');
+            var baseThemePath = $"{themesRoot}{SiteThemeName}/";
+
+            return baseThemePath;
+        }
+
         private void SetThemeConfig(string SiteThemeName)
         {
-            string path = GetConfigFilePath(SiteThemeName);
+            string path = GetThemeConfigFilePath(SiteThemeName);
             var lastModified = System.IO.File.GetLastWriteTime(path);
 
-            if (_config.ThemeName != SiteThemeName ||
-                (_config.ThemeName == SiteThemeName && lastModified > _config.ConfigTimestamp))
+            if (_ThemeConfig.ThemeName != SiteThemeName ||
+                (_ThemeConfig.ThemeName == SiteThemeName && lastModified > _ThemeConfig.ConfigTimestamp))
             {
                 // If the file is not there => Create with defaults
                 CreateThemeConfigFileIfNotExists(SiteThemeName);
@@ -285,14 +457,14 @@
                 newConfig.ConfigPath = path;
                 newConfig.ConfigTimestamp = lastModified;
 
-                _config = newConfig;
+                _ThemeConfig = newConfig;
             }
 
         }
         private void CreateThemeConfigFileIfNotExists(string SiteThemeName)
         {
             // Create from configuration file
-            string path = GetConfigFilePath(SiteThemeName);
+            string path = GetThemeConfigFilePath(SiteThemeName);
 
             // If it is not there yet, serialize our defaults to file
             if (!File.Exists(path))
@@ -301,12 +473,11 @@
 
                 using (StreamWriter file = new StreamWriter(path))
                 {
-                    serializer.Serialize(file, DefaultConfig);
+                    serializer.Serialize(file, DefaultThemeConfig);
                 }
             }
         }
-
-        private string GetConfigFilePath(string SiteThemeName)
+        private string GetThemeConfigFilePath(string SiteThemeName)
         {
             var themeRoot = GetThemePath(SiteThemeName);
             var configPath = themeRoot + "Theme.config";
@@ -314,15 +485,22 @@
         }
 
 
-        private readonly ThemeConfig DefaultConfig = new ThemeConfig
+        private readonly ThemeConfig DefaultThemeConfig = new ThemeConfig
         {
             Author = "Unspecified Author",
             AuthorUrl = "https://unknown",
             SourceUrl = "https://unknown",
             CssFramework = "Unspecified Framework",
-            GridRenderer = "Bootstrap3",
+            GridRenderer = "Bootstrap3WithTheming",
             Description = "Theme description..."
         };
+
+        private string GetNonThemedFolder(string FolderPath)
+        {
+            var absolutePath = FolderPath.EnsureEndsWith('/');
+            var virtualPath = absolutePath;
+            return virtualPath;
+        }
 
         #endregion
 
@@ -336,20 +514,47 @@
         /// Returns the url of a themed asset
         /// <example>In a View:
         /// <code>@Url.ThemedAsset(Model, "images/favicon.ico")</code>
-        /// <em>NOTE: requires '@using ClientDependency.Core.Mvc'</em>
         /// </example>
         /// </summary>
         /// <param name="Url">UrlHelper (@Url.)</param>
+        /// <param name="ThemeHelper"></param>
         /// <param name="SiteThemeName"></param>
         /// <param name="RelativeAssetPath">Path to file inside [theme]/Assets/ folder</param>
         /// <returns></returns>
-        public static string ThemedAsset(this UrlHelper Url, ThemeHelperService ThemeHelper, string SiteThemeName, string RelativeAssetPath)
+        public static string ThemedAsset(this IUrlHelper Url, ThemeHelperService ThemeHelper, string SiteThemeName, string RelativeAssetPath)
         {
-            var themeRoot = ThemeHelper.GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeRoot);
-            //var absolutePath = VirtualPathUtility.ToAbsolute(themeRoot).EnsureEndsWith('/');
-            var absolutePath = themeRoot.EnsureEndsWith('/');
-            var virtualPath = absolutePath + "Assets/" + RelativeAssetPath;
+            //var themeRoot = ThemeHelper.GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeRoot);
+            ////var absolutePath = VirtualPathUtility.ToAbsolute(themeRoot).EnsureEndsWith('/');
+            //var absolutePath = themeRoot.EnsureEndsWith('/');
+            //var virtualPath = absolutePath + "Assets/" + RelativeAssetPath;
+            var virtualPath = ThemeHelper.GetThemedAssetFile(SiteThemeName, RelativeAssetPath);
             return virtualPath;
+        }
+
+        public static string GetCssOverridePath(this IUrlHelper Url, ThemeHelperService ThemeHelper,
+            string CssOverrideFileName)
+        {
+            var path = ThemeHelper.GetCssOverridePath(CssOverrideFileName);
+
+            return path;
+        }
+
+        public static string GetCssOverridePath(this IUrlHelper Url, ThemeHelperService ThemeHelper, IPublishedContent CurrentPage)
+        {
+            var cssPropAlias = ThemeHelper.CssPropertyAlias();
+
+            if (!string.IsNullOrEmpty(cssPropAlias))
+            {
+                var cssPropValue = CurrentPage.AncestorOrSelf(1).Value<string>(cssPropAlias);
+
+                var path = ThemeHelper.GetCssOverridePath(cssPropValue);
+
+                return path;
+            }
+            else
+            {
+                return "";
+            }
         }
 
         #endregion
@@ -365,7 +570,7 @@
         /// <param name="ViewModel"></param>
         /// <param name="ViewData"></param>
         /// <returns></returns>
-        public static HtmlString ThemedPartial(this HtmlHelper html, ThemeHelperService ThemeHelper, string SiteThemeName, string PartialName, object ViewModel, ViewDataDictionary ViewData = null)
+        public static HtmlString ThemedPartial(this IHtmlHelper html, ThemeHelperService ThemeHelper, string SiteThemeName, string PartialName, object ViewModel, ViewDataDictionary ViewData = null)
         {
             //try
             //{
@@ -390,7 +595,7 @@
         /// <param name="PartialName"></param>
         /// <param name="ViewData"></param>
         /// <returns></returns>
-        public static HtmlString ThemedPartial(this HtmlHelper html, ThemeHelperService ThemeHelper, string SiteThemeName, string PartialName, ViewDataDictionary ViewData = null)
+        public static HtmlString ThemedPartial(this IHtmlHelper html, ThemeHelperService ThemeHelper, string SiteThemeName, string PartialName, ViewDataDictionary ViewData = null)
         {
             if (ViewData == null)
             {
@@ -414,7 +619,7 @@
 
         #endregion
 
-        #region Smidge
+        #region Obsolete
 
         //public static HtmlHelper RequiresThemedCss(this HtmlHelper html, ThemeHelperService ThemeHelper, string SiteThemeName, string FilePath)
         //{
@@ -451,7 +656,7 @@
             View,
             PartialView,
             GridEditor,
-            FormsPartialsRoot,
+            FormsThemesRoot,
             Configs
         }
     }
