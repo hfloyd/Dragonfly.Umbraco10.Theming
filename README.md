@@ -26,16 +26,16 @@ On your root Document Type, use the included "Theme Picker" Property Type to add
 
 In appSettings.json add this section at the root-level (aka a sibling of 'Umbraco', not a child):
 
-    "DragonflyTheming": {
+	"DragonflyTheming": {
 		"ThemesRootFolder": "~/Themes",
-    	"ThemePickerPropertyAlias": "Theme",
- 		"CssFilePickerPropertyAlias": "SiteCss",
-    	"EnableDefaultThemeController": false,
-    	"FallbackAssetsCssFolder": "~/css",
-        "ThemedAssetsCssFolder": "Css",
-        "FallbackAssetsJsFolder": "~/scripts",
-        "ThemedAssetsJsFolder": "Js"
-    }
+		"ThemePickerPropertyAlias": "Theme",
+		"CssFilePickerPropertyAlias": "SiteCss",
+		"EnableDefaultThemeController": false,
+		"FallbackAssetsCssFolder": "~/css",
+		"ThemedAssetsCssFolder": "Css",
+		"FallbackAssetsJsFolder": "~/scripts",
+		"ThemedAssetsJsFolder": "Js"
+	}
 
 
 The Controller which runs for each page request needs to determine the Themed View file to render the page with, so if you already have custom controllers operating in your site, be sure to include something that will route the theme correctly. For example:
@@ -111,7 +111,7 @@ The Controller which runs for each page request needs to determine the Themed Vi
 	}
 
 
-If you are not using any custom controllers, you can enable the 'DefaultThemeController' via the appSettings entries:
+If you are not using any custom controllers, you can enable the 'DefaultThemeController' via the appSettings entries, which will handle theme routing for you automatically:
 
     "DragonflyTheming": {
 		...
@@ -152,23 +152,23 @@ The Views folder in your Theme is where all customized View files should go. Jus
 
 You can organize your assets folder however you like, but keep in mind that certain ThemeHelper functions rely upon knowing where the CSS and JS files are located. If you can standardize across all your themes, and make sure the AppSettings reflects your folder structure, that would be best. The config values represent the path once inside the '/MY_THEME/Assets/' folder:
 
-    "DragonflyTheming": {
+	"DragonflyTheming": {
 		...
 		"ThemedAssetsCssFolder": "css",
-        "ThemedAssetsJsFolder": "js"
+		"ThemedAssetsJsFolder": "js"
 		...
-    }
+	}
 
 If you have shared CSS/JS files (such as libraries, CSS frameworks, etc.) you can use web root relative folders (such as the Umbraco defaults "css" and "scripts" - which are available in the back-office) to hold those files, and reference them directly in your themed templates. 
 
 You can also have default fallback versions of certain CSS/JS files in the shared folders, if desired. Just make sure the config knows about your defaults:
 
-    "DragonflyTheming": {
+	"DragonflyTheming": {
 		...
 		"FallbackAssetsCssFolder": "~/css",
-        "FallbackAssetsJsFolder": "~/scripts",
-        ...
-    }
+		"FallbackAssetsJsFolder": "~/scripts",
+		...
+	}
 
 ### Config Files ###
 
@@ -176,7 +176,7 @@ If you have theme-specific configuration files of whatever type, they can be add
 
 You can get either the current theme's config file, or the default, if none exists in the current theme in your custom code using `GetFinalThemePath()` with `Theming.PathType.Configs` (or use the shortcut - `GetThemedConfigFilePath()`).
 
-## Changes from v7/v8 Version to v10 Version##
+## Changes from v7/v8 Version to v10 Version ##
 If you are updating an Umbraco site which was previously using Dragonfly Theming, there are a few things you might want to know that have changed.
 
 In terms of the code itself, there was some refactoring as well as bringing it into line with ASP.Net Core / Umbraco 10 best-practices (specifically better use of IoC / Dependency Injection). I've also added many more configurations for things which were otherwise hard-coded (such as folder locations, etc.).
@@ -185,5 +185,5 @@ Some things you will need to be aware of while updating your Themes and any cust
 
 - The static "ThemeHelper" has been converted to a non-static "ThemeHelperService". You will need to inject it into your views like this: `@inject ThemeHelperService ThemeHelper` (Put this into "_ViewImports.cshtml" and you won't have to add it to every View manually.)
 - The HtmlHelpers and UrlHelpers have been moved to their own static Extensions class, so they are available as before, except you will now need to pass in the ThemeHelperService. ex: `@Url.ThemedAsset(ThemeHelper, thisTheme, "images/favicon.ico")`
-- The HtmlHelpers `RequiresThemedCss(}`, `RequiresThemedJs()`, `RequiresThemedCssFolder()`, and `RequiresThemedJsFolder()` have been removed, since ClientDependency has been swapped out for Smidge. Take a look at the provided "_Master.cshtml" file (in the "Themes/~CopyForNewTheme/Views" folder) for example code using Smidge. You can also use whatever bundling framework you prefer, since now helpers are available to return themed file and folder paths.
+- The HtmlHelpers `RequiresThemedCss()`, `RequiresThemedJs()`, `RequiresThemedCssFolder()`, and `RequiresThemedJsFolder()` have been removed, since ClientDependency has been swapped out for Smidge. Take a look at the provided "_Master.cshtml" file (in the "Themes/~CopyForNewTheme/Views" folder) for example code using Smidge. You can also use whatever bundling framework you prefer, since now helpers are available to return themed file and folder paths.
 - All the included example Razor files have been updated as well, so if you are confused about anything, take a look at the contents of the "Themes/~CopyForNewTheme" folder, as well as "/Views/Partials/Grid/Bootstrap3WithTheming.cshtml" and "/Views/MacroPartials/~ExampleThemedMacro.cshtml"
