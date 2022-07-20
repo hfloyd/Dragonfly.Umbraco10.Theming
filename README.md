@@ -27,6 +27,7 @@ On your root Document Type, use the included "Theme Picker" Property Type to add
 In appSettings.json add this section at the root-level (aka a sibling of 'Umbraco', not a child):
 
 	"DragonflyTheming": {
+		"ThemesAreInWwwRoot": false,
 		"ThemesRootFolder": "~/Themes",
 		"ThemePickerPropertyAlias": "Theme",
 		"CssFilePickerPropertyAlias": "SiteCss",
@@ -123,7 +124,7 @@ If you are not using any custom controllers, you can enable the 'DefaultThemeCon
 
 ## Individual Theme Configuration ##
 
-You can store information about the Theme in an XML 'Theme.config' file. See the [example config](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming/blob/master/src/Dragonfly/Themes/%7ECopyForNewTheme/Theme.config) for format.
+You can store information about the Theme in an XML 'Theme.config' file. See the example config at "Themes/~CopyForNewTheme/Theme.config" for the format.
 
 If the file doesn't exist in a Theme, a default one will be created automatically.
 
@@ -131,26 +132,27 @@ This is most useful for storing information about the GridRenderer used for the 
 
 Example for a View:
     
-    var thisTheme = Model.Theme;
+    var thisTheme = ThemeHelper.GetSiteThemeName(Model);
     var themeConfiguration = ThemeHelper.GetThemeConfig(thisTheme);
     
-    @Html.GetTypedGridHtml(Model.GridProperty, themeConfiguration.GridRenderer)
+    @Html.GetGridHtml(Model, "GridPropertyAlias", themeConfiguration.GridRenderer)
 
-This allows you to store the basic renderers all together outside of the Themes for reuse across Themes.
+This allows you to store the basic renderers all together outside of the Themes (in the standard root-level "/Views/Partials/grid/" folder) for reuse across Themes.
 
 
 ## Theme Conventions ##
 
-Any folder in the root "Themes" folder will have its name uses as an available Theme, except for folders which start with a tilda (~), which will be ignored by the Theme Picker.
+Any folder in the "Themes" folder will have its name used as an available Theme, except for folders which start with a tilda (~), which will be ignored by the Theme Picker.
 
 Any css file in the "Themes/~CssOverrides" folder will be available in the CSS Picker.
 
 ### Views ###
+
 The Views folder in your Theme is where all customized View files should go. Just like in the main Umbraco-provided Views folder, you can have a "Partials" subfolder, etc. When a page is routed to its View, the Theme folder will be checked first, and if a matching file is not found there, it will default to the file in the primary Views folder (so make sure **all** your templates do have a file in the primary Views folder - even if it is blank).
 
 ### Assets ###
 
-You can organize your assets folder however you like, but keep in mind that certain ThemeHelper functions rely upon knowing where the CSS and JS files are located. If you can standardize across all your themes, and make sure the AppSettings reflects your folder structure, that would be best. The config values represent the path once inside the '/MY_THEME/Assets/' folder:
+You can organize your assets folder however you like, but keep in mind that certain ThemeHelper functions rely upon knowing where the CSS and JS files are located. If you can standardize across all your themes, and make sure the AppSettings reflects your folder structure, that would be best. The config values represent the path once inside the 'Themes/MY_THEME/Assets/' folder:
 
 	"DragonflyTheming": {
 		...
@@ -174,7 +176,7 @@ You can also have default fallback versions of certain CSS/JS files in the share
 
 If you have theme-specific configuration files of whatever type, they can be added to a Theme folder in a subfolder named "Configs". You should also provide a default fall-back version of any config file you plan to call in a folder in the "Themes" root named "~DefaultConfigs".
 
-You can get either the current theme's config file, or the default, if none exists in the current theme in your custom code using `GetFinalThemePath()` with `Theming.PathType.Configs` (or use the shortcut - `GetThemedConfigFilePath()`).
+You can get either the current theme's file, or the default, if none exists in the current theme in your custom code using `GetFinalThemePath()` with `Theming.PathType.Configs` (or use the shortcut - `GetThemeConfigsFolderPath()`).
 
 ## Changes from v7/v8 Version to v10 Version ##
 If you are updating an Umbraco site which was previously using Dragonfly Theming, there are a few things you might want to know that have changed.

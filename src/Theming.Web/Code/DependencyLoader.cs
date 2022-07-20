@@ -1,6 +1,5 @@
 ﻿namespace Dragonfly.UmbracoTheming
 {
-    using Dragonfly.UmbracoServices;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
@@ -9,7 +8,6 @@
     using Umbraco.Cms.Core.Services;
     using Umbraco.Cms.Core.Web;
     using Umbraco.Cms.Web.Common;
-    using IHostingEnvironment = Umbraco.Cms.Core.Hosting.IHostingEnvironment;
 
     public class DependencyLoader
     {
@@ -22,15 +20,13 @@
         public ServiceContext Services;
 
         public AppCaches AppCaches;
-        //public FileHelperService DragonflyFileHelperService { get; }
-
+     
         public IConfiguration AppSettingsConfig;
 
         public DependencyLoader(
             IWebHostEnvironment hostingEnvironment,
             IHttpContextAccessor contextAccessor,
             IUmbracoContextAccessor umbracoContextAccessor,
-            //FileHelperService fileHelperService,
             ServiceContext serviceContext,
             AppCaches appCaches,
             IConfiguration appSettingsConfig

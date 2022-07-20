@@ -3,7 +3,7 @@
     function ($scope, umbRequestHelper, $http) {
 
     //var url = Umbraco.Sys.ServerVariables["Theming"]["ThemingPropertyEditorsBaseUrl"] + "GetThemes";
-        var url = "api/CssOverridePropertyEditorApi/GetFiles";
+        var url = "/Umbraco/backoffice/Dragonfly/CssOverridePropertyEditor/GetFiles";
 
     umbRequestHelper.resourcePromise(
             $http.get(url),

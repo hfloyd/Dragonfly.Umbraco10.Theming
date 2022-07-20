@@ -4,7 +4,8 @@
 
     //Examples of Theming code
     //var thisTheme = Model.Value<string>("Theme", fallback: Fallback.ToAncestors);
-	//var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+	var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+	var themeConfiguration = ThemeHelper.GetThemeConfig(thisTheme);
 
     //var masterViewPath = ThemeHelper.GetThemeViewPath(thisTheme, "_Page");
     //Layout = masterViewPath;
@@ -13,3 +14,4 @@
 
 
 @*//Page Content Here...*@
+@Html.GetGridHtml(Model, "GridPropertyAlias", themeConfiguration.GridRenderer)

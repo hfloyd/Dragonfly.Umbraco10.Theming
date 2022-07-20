@@ -9,6 +9,10 @@
         //AppSettings Config Section name
         public const string DragonflyTheming = "DragonflyTheming";
 
+        [JsonProperty("ThemesAreInWwwRoot")]
+        public bool ThemesAreInWwwRoot { get; set; } = true;
+        
+
         [JsonProperty("EnableDefaultThemeController")]
         public bool EnableDefaultThemeController { get; set; } = false;
 

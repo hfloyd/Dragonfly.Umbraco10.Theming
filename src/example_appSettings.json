@@ -1,5 +1,6 @@
 {
     "DragonflyTheming": {
+        "ThemesAreInWwwRoot" : true,
         "ThemesRootFolder": "~/Themes",
         "ThemePickerPropertyAlias": "Theme",
         "CssFilePickerPropertyAlias": "SiteCss",

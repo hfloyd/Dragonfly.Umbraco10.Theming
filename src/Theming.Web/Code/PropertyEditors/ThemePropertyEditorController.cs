@@ -14,13 +14,13 @@
 
     //  /Umbraco/backoffice/Dragonfly/ThemePropertyEditor/
     [PluginController("Dragonfly")]
-    //[IsBackOffice]
-    public class ThemePropertyEditorController : UmbracoApiController
+    [IsBackOffice]
+    public class ThemePropertyEditorController : UmbracoAuthorizedApiController
     {
         private readonly ILogger<ThemePropertyEditorController> _logger;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ThemeHelperService _themeHelperService;
-        
+
         public ThemePropertyEditorController(
             ILogger<ThemePropertyEditorController> logger,
             IWebHostEnvironment hostingEnvironment,
@@ -37,21 +37,23 @@
         [HttpGet]
         public IEnumerable<string> GetThemes()
         {
-            var themeDirName = _themeHelperService.ThemingConfigOptions().ThemesRootFolder;
-            var dir = _hostingEnvironment.MapPathWebRoot(themeDirName);
+           // var themeDirName = _themeHelperService. //_themeHelperService.ThemingConfigOptions().ThemesRootFolder;
+           var dir = _themeHelperService.GetAllThemesRoot(true);// _hostingEnvironment.MapPathWebRoot(themeDirName);
+
             var allDirs = Directory.GetDirectories(dir).Select(x => new DirectoryInfo(x).Name);
             allDirs = allDirs.Where(x => !x.StartsWith("~"));
             return allDirs;
         }
-#region Tests & Examples
+
+        #region Tests & Examples
 
         //  /Umbraco/backoffice/Dragonfly/ThemePropertyEditor/Test
         [HttpGet]
         public bool Test()
         {
-           return true;
+            return true;
         }
-#endregion 
+        #endregion
     }
 
 }
