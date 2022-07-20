@@ -25,6 +25,11 @@ There is also a .Core version available which only includes the DLL files. This 
 ## Resources ##
 GitHub Repository: [https://github.com/hfloyd/Dragonfly.Umbraco10.Theming](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming)
 
+
+- [Dragonfly Theming for Umbraco 10](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming) 
+- [Dragonfly Theming for Umbraco 8](https://github.com/hfloyd/Dragonfly.Umbraco8Theming) 
+- [Dragonfly Theming for Umbraco 7](https://github.com/hfloyd/Dragonfly.UmbracoTheming)
+
 ## Setup ##
 On your root Document Type, use the included "Theme Picker" Property Type to add a property for the site's chosen theme. 
 
