@@ -1,21 +1,26 @@
 # Dragonfly Umbraco 10 Theming #
 
-A theming system for Umbraco version 10 created by [Heather Floyd](https://www.HeatherFloyd.com).
+ A theming system for Umbraco version 10 created by [Heather Floyd](https://www.HeatherFloyd.com).
 
-For a general explanation of the concept, see the article below. **Note that this article was published before the code was further developed and put into GitHub. Also, the article is based on Umbraco 7, thus should really just be used for a general understanding - this package includes the code otherwise provided by the ZIP file mentioned in the article.**
-
- [How to Create Multiple Unique Sites in One Installation Using Theming and the Umbraco Grid](https://24days.in/umbraco-cms/2016/unique-sites-using-theming/)
-
-This package will install a few examples in the "Views" folder, along with a Themes folder which includes an unstyled "starter" theme.
+> For a general explanation of the concept, see the article ["How to Create Multiple Unique Sites in One Installation Using Theming and the Umbraco Grid"](https://24days.in/umbraco-cms/2016/unique-sites-using-theming/). 
+Please be aware that this article was published in 2016 before the code was further developed and put into GitHub. Also, the article is based on Umbraco 7, thus should really just be used for a general understanding - **this package includes all the code otherwise provided by the ZIP file mentioned in the article.** 
 
 Credit goes to [Shannon Deminick's *Articulate* package](https://github.com/Shazwazza/Articulate) for inspiration and initial code.
 
-**NOTE** This project was ported from the [v8 version](https://github.com/hfloyd/Dragonfly.Umbraco8Theming). Please report any issues you experience. 
+**NOTE:** This project was ported from the [v8 version](https://github.com/hfloyd/Dragonfly.Umbraco8Theming). Please [report any issues](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming/issues) you experience.
 
 ## Installation ##
-[![Nuget Downloads](https://buildstats.info/nuget/Dragonfly.Umbraco10.Theming)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming/)
+Generally, you will want to install the .Web version of the package into your Umbraco project, which includes the App_Plugins, a setup of the Themes folder, and example Razor files:
 
-     PM>   Install-Package Dragonfly.Umbraco10.Theming
+[![Nuget Downloads](https://buildstats.info/nuget/Dragonfly.Umbraco10.Theming.Web)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Web/)
+
+     PM>   Install-Package Dragonfly.Umbraco10.Theming.Web
+
+There is also a .Core version available which only includes the DLL files. This can be used if you have an accompanying Class project which needs to access the ThemeHelperService:
+
+[![Nuget Downloads](https://buildstats.info/nuget/Dragonfly.Umbraco10.Theming.Core)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Core/)
+
+     PM>   Install-Package Dragonfly.Umbraco10.Theming.Core
 
 ## Resources ##
 GitHub Repository: [https://github.com/hfloyd/Dragonfly.Umbraco10.Theming](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming)
@@ -46,68 +51,67 @@ The Controller which runs for each page request needs to determine the Themed Vi
 	    using Microsoft.AspNetCore.Mvc;
 	    using Microsoft.AspNetCore.Mvc.ViewEngines;
 	    using Microsoft.Extensions.Logging;
-	    using Umbraco.Cms.Core.Models;
 	    using Umbraco.Cms.Core.Web;
 	    using Umbraco.Cms.Web.Common.Controllers;
 	    using Umbraco.Extensions;
-	
+
 	    /// <summary>
 	    /// Find the theme setting and retrieve the appropriate view
 	    /// </summary>
 	    public class DefaultController : RenderController
 	    {
-	        private readonly ILogger _logger;
-	        private readonly ThemeHelperService _ThemeHelperService;        
-	
-	        public DefaultController(
-	            ILogger<DefaultThemeController> logger,
-	            ThemeHelperService themeHelperService,
-	            ICompositeViewEngine compositeViewEngine,
-	            IUmbracoContextAccessor umbracoContextAccessor)
-	        : base(logger, compositeViewEngine, umbracoContextAccessor)
-	        {
-	            _logger = logger;
-	            _ThemeHelperService = themeHelperService;
-	        }
-	
-	        // GET: Default
-	        public IActionResult Index(ContentModel model)
-	        {
-	            var themeProp = _ThemeHelperService.ThemePropertyAlias();
-	
-	            if (!string.IsNullOrEmpty(themeProp))
-	            {
-	                var currentTemplateName = model.Content.GetTemplateAlias();
-	
-	                //Set logic to get the node which has the Theme Picker on it
-	                var rootNode = model.Content.AncestorOrSelf(1);
-	                if (rootNode != null)
-	                {
-	                    var siteTheme = rootNode.Value<string>(themeProp);
-	                    if (string.IsNullOrEmpty(siteTheme))
-	                    {
-	                        _logger.LogWarning($"Node '{rootNode.Name}' does not have a value for Theme picker property '{themeProp}'.");
-	                        return base.CurrentTemplate(model);
-	                    }
-	                    else
-	                    {
-	                        var templatePath =
-	                            _ThemeHelperService.GetFinalThemePath(siteTheme, Theming.PathType.View, currentTemplateName);
-	                        return View(templatePath, model);
-	                    }
-	                }
-	                else
-	                {
-	                    _logger.LogWarning($"DefaultController: Root Node is NULL for node #{model.Content.Id}");
-	                    return base.CurrentTemplate(model);
-	                }
-	            }
-	            else
-	            {
-	                _logger.LogWarning($"AppSetting 'DragonflyTheming.ThemePickerPropertyAlias' is not set.");
-	                return base.CurrentTemplate(model);
-	            }
-	        }
+		private readonly ILogger _logger;
+		private readonly ThemeHelperService _ThemeHelperService;
+
+		public DefaultController(
+		    ILogger<DefaultController> logger,
+		    ThemeHelperService themeHelperService,
+		    ICompositeViewEngine compositeViewEngine,
+		    IUmbracoContextAccessor umbracoContextAccessor)
+		    : base(logger, compositeViewEngine, umbracoContextAccessor)
+		{
+		    _logger = logger;
+		    _ThemeHelperService = themeHelperService;
+		}
+
+		// GET: Default
+		public override IActionResult Index()
+		{
+		    var themeProp = _ThemeHelperService.ThemePropertyAlias();
+
+		    if (!string.IsNullOrEmpty(themeProp))
+		    {
+			var currentTemplateName = CurrentPage.GetTemplateAlias();
+
+			//Set logic to get the node which has the Theme Picker on it
+			var rootNode = CurrentPage.AncestorOrSelf(1);
+			if (rootNode != null)
+			{
+			    var siteTheme = rootNode.Value<string>(themeProp);
+			    if (string.IsNullOrEmpty(siteTheme))
+			    {
+				_logger.LogWarning($"Node '{rootNode.Name}' does not have a value for Theme picker property '{themeProp}'.");
+				return base.CurrentTemplate(CurrentPage);
+			    }
+			    else
+			    {
+				var templatePath =
+				    _ThemeHelperService.GetFinalThemePath(siteTheme, Theming.PathType.View, currentTemplateName);
+				return View(templatePath, CurrentPage);
+			    }
+			}
+			else
+			{
+			    _logger.LogWarning($"DefaultThemeController: Root Node is NULL for node #{CurrentPage.Id}");
+			    return base.CurrentTemplate(CurrentPage);
+			}
+		    }
+		    else
+		    {
+			_logger.LogWarning($"AppSetting 'DragonflyTheming.ThemePickerPropertyAlias' is not set.");
+			return base.CurrentTemplate(CurrentPage);
+		    }
+		}
 	    }
 	}
 
