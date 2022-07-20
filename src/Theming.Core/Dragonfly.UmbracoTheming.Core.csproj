@@ -22,7 +22,7 @@
 		<RepositoryUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</RepositoryUrl>
 
 		<PackageTags>Umbraco 10</PackageTags>
-		<PackageReleaseNotes>First release</PackageReleaseNotes>
+		<PackageReleaseNotes>First stable release (there might be some bugs, but generally working)</PackageReleaseNotes>
 
 	</PropertyGroup>
 
@@ -41,7 +41,7 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Core</AssemblyName>
-		<Version>0.0.34</Version>
+		<Version>0.1.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
