@@ -28,8 +28,8 @@
 
 	<!-- Author Info + Legal-->
 	<PropertyGroup>
-		<Authors>Heather Floyd</Authors>
-		<Company></Company>
+		<Authors>HFloyd</Authors>
+		<Company>Heather Floyd</Company>
 		<Copyright>Heather Floyd [www.HeatherFloyd.com]</Copyright>
 
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -40,10 +40,12 @@
 	<!-- Assembly Info-->
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
-		<AssemblyName>Dragonfly.UmbracoTheming</AssemblyName>
-		<Version>0.0.13</Version>
+		<AssemblyName>Dragonfly.UmbracoTheming.Core</AssemblyName>
+		<Version>0.0.34</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
+		<VersionPrefix>$(Version)</VersionPrefix>
+		<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
 	</PropertyGroup>
 
 	
@@ -60,27 +62,20 @@
 	
 	<!-- Packages-->
 	<ItemGroup>
-		<PackageReference Include="Dragonfly.Net5" Version="1.1.0">
-			<TreatAsUsed>true</TreatAsUsed>
-		</PackageReference>
-		<PackageReference Include="Dragonfly.Umbraco9" Version="1.1.0">
-			<TreatAsUsed>true</TreatAsUsed>
-		</PackageReference>
+		<PackageReference Include="Umbraco.Cms" Version="10.0.1" PrivateAssets="All" />
 		<PackageReference Include="Umbraco.Cms.Core" Version="10.0.1" PrivateAssets="All" />
-			<PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.1" PrivateAssets="All">
-			<TreatAsUsed>true</TreatAsUsed>
-		</PackageReference>
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.1" PrivateAssets="All" />
-
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.1" PrivateAssets="All" />
 	</ItemGroup>
+
+
 	
 	<!--Include App_Plugins & targets file: NONE-->
 	
 	<Import Project="..\Custom.targets" />
+	
 	<!-- Excluded Files -->
-	<ItemGroup>
-	  <Compile Remove="ThemeBootstrapper.cs" />
-	</ItemGroup>
+
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="REM XCOPY /y &quot;$(TargetDir)$(TargetName)*.*&quot; &quot;C:\Users\Heather\NAS Folders\Active Projects\Webs\HeatherFloyd.com\sourcecode\src\UmbracoProject\bin\Debug\net6.0&quot;&#xD;&#xA;REM XCOPY /y &quot;$(TargetDir)$(TargetName)*.*&quot; &quot;XXX\bin\&quot;" />
 	</Target>
