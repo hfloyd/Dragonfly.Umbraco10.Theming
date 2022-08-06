@@ -35,7 +35,7 @@
         public IEnumerable<string> GetFiles()
         {
             //var themeDirName = _themeHelperService.ThemingConfigOptions().ThemesRootFolder.EnsureEndsWith('/');
-            var themesRoot = _themeHelperService.GetAllThemesRoot(true).EnsureEndsWith('/');
+            var themesRoot = _themeHelperService.GetAllThemesStaticFilesRoot(true).EnsureEndsWith('/');
             var dir = $"{themesRoot}~CssOverrides";
 
             //return Directory.GetDirectories(dir).Select(x => new DirectoryInfo(x).Name);

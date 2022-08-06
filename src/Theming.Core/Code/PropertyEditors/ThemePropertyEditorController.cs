@@ -38,7 +38,7 @@
         public IEnumerable<string> GetThemes()
         {
            // var themeDirName = _themeHelperService. //_themeHelperService.ThemingConfigOptions().ThemesRootFolder;
-           var dir = _themeHelperService.GetAllThemesRoot(true);// _hostingEnvironment.MapPathWebRoot(themeDirName);
+           var dir = _themeHelperService.GetAllThemesViewsRoot(true);// _hostingEnvironment.MapPathWebRoot(themeDirName);
 
             var allDirs = Directory.GetDirectories(dir).Select(x => new DirectoryInfo(x).Name);
             allDirs = allDirs.Where(x => !x.StartsWith("~"));

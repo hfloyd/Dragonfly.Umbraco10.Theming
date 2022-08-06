@@ -1,13 +1,13 @@
 {
     "DragonflyTheming": {
-        "ThemesAreInWwwRoot" : true,
-        "ThemesRootFolder": "~/Themes",
+        "ThemeViewsAreInWwwRoot": false,
+        "ThemesRootFolderName": "Themes",
         "ThemePickerPropertyAlias": "Theme",
         "CssFilePickerPropertyAlias": "SiteCss",
         "EnableDefaultThemeController": false,
-        "FallbackAssetsCssFolder": "~/css",
+        "FallbackAssetsCssFolder": "css",
         "ThemedAssetsCssFolder": "Css",
-        "FallbackAssetsJsFolder": "~/scripts",
+        "FallbackAssetsJsFolder": "scripts",
         "ThemedAssetsJsFolder": "Js"
     }
 }

@@ -83,19 +83,19 @@
             }
         }
 
-        public string GetAllThemesRoot(bool ReturnPhysicalPath = false)
+        public string GetAllThemesViewsRoot(bool ReturnPhysicalPath = false)
         {
 
-            var themesRootFolder = _ConfigOptions.ThemesRootFolder.EnsureEndsWith('/');
-            var baseThemePath = themesRootFolder;// $"{themesRootFolder}{SiteThemeName}/";
+            var themesRootFolderName = _ConfigOptions.ThemesRootFolderName.EnsureEndsWith('/').EnsureStartsWith('/');
+            var baseThemePath = themesRootFolderName;// $"{themesRootFolder}{SiteThemeName}/";
 
             //var themesRootPrefix = _ConfigOptions.ThemesAreInWwwRoot ? "wwwroot/" : "";
 
             //var virtualPath = $"{baseThemePath}";
-            
+
             if (ReturnPhysicalPath)
             {
-                var physicalPath = MapThemePath(baseThemePath);
+                var physicalPath = MapThemePath(baseThemePath, Theming.ThemeFileType.Views);
                 return physicalPath;
             }
             else
@@ -104,6 +104,26 @@
             }
         }
 
+        public string GetAllThemesStaticFilesRoot(bool ReturnPhysicalPath = false)
+        {
+
+            var themesRootFolderName = _ConfigOptions.ThemesRootFolderName.EnsureEndsWith('/').EnsureStartsWith("/");
+            var baseThemePath = themesRootFolderName;// $"{themesRootFolder}{SiteThemeName}/";
+
+            //var themesRootPrefix = _ConfigOptions.ThemesAreInWwwRoot ? "wwwroot/" : "";
+
+            //var virtualPath = $"{baseThemePath}";
+
+            if (ReturnPhysicalPath)
+            {
+                var physicalPath = MapThemePath(baseThemePath, Theming.ThemeFileType.StaticFiles);
+                return physicalPath;
+            }
+            else
+            {
+                return baseThemePath;
+            }
+        }
 
         /// <summary>
         /// Looks for the Theme property specified on the Site root node (Ancestor at Level 1)
@@ -161,14 +181,14 @@
             var themePath = "";
             var isFolder = false;
 
-            var physicalThemesRoot = GetAllThemesRoot(true);
-            var virtualThemesRoot = GetAllThemesRoot(false).EnsureEndsWith('/');
+            var fileType = ConvertPathTypeToFileType(PathType);
+            var virtualThemesRoot = (fileType == Theming.ThemeFileType.Views ? GetAllThemesViewsRoot(false) : GetAllThemesStaticFilesRoot(false));
             var baseThemePath = $"{virtualThemesRoot}{SiteThemeName}";
             var viewName = Path.GetFileNameWithoutExtension(ViewOrFileName);
 
             switch (PathType)
             {
-                case Theming.PathType.ThemeRoot:
+                case Theming.PathType.ThemeViewsRoot:
                     standardPath = "";
                     themePath = baseThemePath;
                     isFolder = true;
@@ -200,12 +220,21 @@
                     themePath = $"{baseThemePath}/Views/Partials/Grid/Editors/{viewName}.cshtml";
                     break;
 
+                case Theming.PathType.ThemeStaticFilesRoot:
+                    standardPath = "";
+                    themePath = baseThemePath.EnsureEndsWith("/");
+                    //themePath = $"{baseThemePath}/Views/Partials/Forms/Themes/";
+                    isFolder = true;
+                    break; 
+                 
                 default:
                     break;
             }
 
             var finalPath = "";
-            var mappedPath = MapThemePath(themePath);
+            // var physicalThemesRoot = (ConvertPathTypeToFileType(PathType) == Theming.ThemeFileType.Views ? GetAllThemesViewsRoot(true) : GetAllThemesStaticFilesRoot(true)).EnsureEndsWith('/');
+
+            var mappedPath = MapThemePath(themePath, ConvertPathTypeToFileType(PathType));
             if (isFolder & System.IO.Directory.Exists(mappedPath))
             {
                 finalPath = themePath;
@@ -222,6 +251,43 @@
             return finalPath;
         }
 
+        private Theming.ThemeFileType ConvertPathTypeToFileType(Theming.PathType PathType)
+        {
+            switch (PathType)
+            {
+                case Theming.PathType.ThemeViewsRoot:
+                    return Theming.ThemeFileType.Unknown;
+                    break;
+
+                case Theming.PathType.ThemeStaticFilesRoot:
+                    return Theming.ThemeFileType.StaticFiles;
+                    break;
+
+                case Theming.PathType.View:
+                    return Theming.ThemeFileType.Views;
+                    break;
+
+                case Theming.PathType.PartialView:
+                    return Theming.ThemeFileType.Views;
+                    break;
+
+                case Theming.PathType.GridEditor:
+                    return Theming.ThemeFileType.Views;
+                    break;
+
+                case Theming.PathType.FormsThemesRoot:
+                    return Theming.ThemeFileType.Views;
+                    break;
+
+                case Theming.PathType.Configs:
+                    return Theming.ThemeFileType.StaticFiles;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(PathType), PathType, null);
+            }
+        }
+
         /// <summary>
         /// Shortcut for 'GetFinalThemePath()' with PathType.ThemeRoot
         /// </summary>
@@ -229,7 +295,7 @@
         /// <returns></returns>
         public string GetThemePath(string SiteThemeName)
         {
-            var path = GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeRoot);
+            var path = GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeViewsRoot);
             return path;
         }
 
@@ -282,11 +348,26 @@
             }
             else
             {
-                var rootThemesPath = _ConfigOptions.ThemesRootFolder.EnsureEndsWith('/');
+                var rootThemesPath = _ConfigOptions.ThemesRootFolderName.EnsureEndsWith('/');
                 var path = $"{rootThemesPath}~CssOverrides/{CssOverrideFileName.EnsureEndsWith(".css")}";
                 return path;
             }
 
+        }
+
+
+        /// <summary>
+        /// Get the path to an Assets subfolder for the Theme
+        /// </summary>
+        /// <param name="SiteThemeName"></param>
+        /// <param name="RelativeAssetFolderPath">Path to folder inside [theme]/Assets/ folder</param>
+        /// <returns></returns>
+        public string GetThemedAssetFolder(string SiteThemeName, string RelativeAssetFolderPath)
+        {
+            var themeRoot = GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeStaticFilesRoot);
+           // var absolutePath = themeRoot.EnsureEndsWith('/');
+            var virtualPath = (themeRoot + "Assets/" + RelativeAssetFolderPath.EnsureEndsWith('/')).EnsureStartsWith("/");
+            return virtualPath;
         }
 
         /// <summary>
@@ -297,23 +378,9 @@
         /// <returns>String representing the file path</returns>
         public string GetThemedAssetFile(string SiteThemeName, string RelativeAssetPath)
         {
-            var themeRoot = GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeRoot);
-            var absolutePath = themeRoot.EnsureEndsWith('/');
-            var virtualPath = absolutePath + "Assets/" + RelativeAssetPath;
-            return virtualPath;
-        }
-
-        /// <summary>
-        /// Get the path to an Assets subfolder for the Theme
-        /// </summary>
-        /// <param name="SiteThemeName"></param>
-        /// <param name="RelativeAssetFolderPath">Path to folder inside [theme]/Assets/ folder</param>
-        /// <returns></returns>
-        public string GetThemedAssetFolder(string SiteThemeName, string RelativeAssetFolderPath)
-        {
-            var themeRoot = GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeRoot);
-            var absolutePath = themeRoot.EnsureEndsWith('/');
-            var virtualPath = absolutePath + "Assets/" + RelativeAssetFolderPath.EnsureEndsWith('/');
+            var themeRoot = GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeStaticFilesRoot);
+            // var absolutePath = themeRoot.EnsureEndsWith('/');
+            var virtualPath = (themeRoot + "Assets/" + RelativeAssetPath).EnsureStartsWith("/");
             return virtualPath;
         }
 
@@ -325,19 +392,7 @@
         public string GetThemedCssFolder(string SiteThemeName)
         {
             var themeFolderConfig = _ConfigOptions.ThemedAssetsCssFolder;
-            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig).EnsureEndsWith('/');
-            return themedFolder;
-        }
-
-        /// <summary>
-        /// Get the path to the JavaScript Assets folder for the Theme
-        /// </summary>
-        /// <param name="SiteThemeName"></param>
-        /// <returns></returns>
-        public string GetThemedJsFolder(string SiteThemeName)
-        {
-            var themeFolderConfig = _ConfigOptions.ThemedAssetsJsFolder;
-            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig).EnsureEndsWith('/');
+            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig);
             return themedFolder;
         }
 
@@ -350,8 +405,8 @@
         /// <returns></returns>
         public string GetThemedCssFile(string SiteThemeName, string CssFileName, bool UseFallback = true)
         {
-            var themeFolderConfig = _ConfigOptions.ThemedAssetsCssFolder;
-            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig).EnsureEndsWith('/');
+            //var themeFolderConfig = _ConfigOptions.ThemedAssetsCssFolder;
+            var themedFolder = GetThemedCssFolder(SiteThemeName);
             var themedFilePath = $"{themedFolder}{CssFileName.EnsureEndsWith(".css")}";
 
             if (!UseFallback)
@@ -361,7 +416,7 @@
             else
             {
                 //Check for file existence
-                if (System.IO.File.Exists(MapThemePath(themedFilePath)))
+                if (System.IO.File.Exists(MapThemePath(themedFilePath, Theming.ThemeFileType.StaticFiles)))
                 {
                     return themedFilePath;
                 }
@@ -375,6 +430,20 @@
         }
 
         /// <summary>
+        /// Get the path to the JavaScript Assets folder for the Theme
+        /// </summary>
+        /// <param name="SiteThemeName"></param>
+        /// <returns></returns>
+        public string GetThemedJsFolder(string SiteThemeName)
+        {
+            var themeFolderConfig = _ConfigOptions.ThemedAssetsJsFolder;
+            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig);
+            return themedFolder;
+        }
+
+     
+
+        /// <summary>
         /// Returns a themed JavaScript file, with optional fallback to default Js folder
         /// </summary>
         /// <param name="SiteThemeName"></param>
@@ -383,8 +452,8 @@
         /// <returns></returns>
         public string GetThemedJsFile(string SiteThemeName, string JsFileName, bool UseFallback = true)
         {
-            var themeFolderConfig = _ConfigOptions.ThemedAssetsJsFolder;
-            var themedFolder = GetThemedAssetFolder(SiteThemeName, themeFolderConfig).EnsureEndsWith('/');
+            //var themeFolderConfig = _ConfigOptions.ThemedAssetsCssFolder;
+            var themedFolder = GetThemedJsFolder(SiteThemeName);
             var themedFilePath = $"{themedFolder}{JsFileName.EnsureEndsWith(".js")}";
 
             if (!UseFallback)
@@ -394,7 +463,7 @@
             else
             {
                 //Check for file existence
-                if (System.IO.File.Exists(MapThemePath(themedFilePath)))
+                if (System.IO.File.Exists(MapThemePath(themedFilePath, Theming.ThemeFileType.StaticFiles)))
                 {
                     return themedFilePath;
                 }
@@ -405,6 +474,7 @@
                     return defaultFilePath;
                 }
             }
+
         }
 
         /// <summary>
@@ -416,10 +486,10 @@
         /// <returns>True if file found</returns>
         public bool HasUmbracoFormsThemeFile(string SiteThemeName, string ViewPath = "", string FormsThemeName = "default")
         {
-            var baseThemePath = GetThemePath(SiteThemeName);
-            var themePath = $"{baseThemePath}Views/Partials/Forms/Themes/{FormsThemeName}/{ViewPath}";
+            var viewFilePath = $"Views/Partials/Forms/Themes/{FormsThemeName}/{ViewPath}";
+            var themePath = GetThemeViewPath(SiteThemeName, viewFilePath);
 
-            if (System.IO.File.Exists(MapThemePath(themePath)))
+            if (System.IO.File.Exists(MapThemePath(themePath, Theming.ThemeFileType.StaticFiles)))
             {
                 return true;
             }
@@ -507,7 +577,7 @@
         {
             var themeRoot = GetThemePath(SiteThemeName).EnsureEndsWith('/');
             var configPath = $"{themeRoot}Theme.config";
-            return MapThemePath(configPath);
+            return MapThemePath(configPath, Theming.ThemeFileType.StaticFiles);
         }
 
 
@@ -528,16 +598,27 @@
             return virtualPath;
         }
 
-        private string MapThemePath(string VirtualPath)
+        private string MapThemePath(string VirtualPath, Theming.ThemeFileType FileType)
         {
-            if (_ConfigOptions.ThemesAreInWwwRoot)
+            switch (FileType)
             {
-                return _HostingEnvironment.MapPathWebRoot(VirtualPath);
+                case Theming.ThemeFileType.Views:
+                    if (_ConfigOptions.ThemeViewsAreInWwwRoot)
+                    {
+                        return _HostingEnvironment.MapPathWebRoot(VirtualPath);
+                    }
+                    else
+                    {
+                        return _HostingEnvironment.MapPathContentRoot(VirtualPath);
+                    }
+                    break;
+                case Theming.ThemeFileType.StaticFiles:
+                    return _HostingEnvironment.MapPathWebRoot(VirtualPath);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(FileType), FileType, null);
             }
-            else
-            {
-                return _HostingEnvironment.MapPathContentRoot(VirtualPath);
-            }
+
 
         }
 
@@ -691,12 +772,20 @@
     {
         public enum PathType
         {
-            ThemeRoot,
+            ThemeViewsRoot,
             View,
             PartialView,
             GridEditor,
             FormsThemesRoot,
-            Configs
+            Configs,
+            ThemeStaticFilesRoot
+        }
+
+        public enum ThemeFileType
+        {
+            Views,
+            StaticFiles,
+            Unknown
         }
     }
 }

@@ -31,23 +31,33 @@ GitHub Repository: [https://github.com/hfloyd/Dragonfly.Umbraco10.Theming](https
 - [Dragonfly Theming for Umbraco 7](https://github.com/hfloyd/Dragonfly.UmbracoTheming)
 
 ## Setup ##
+Because this is a .Net Core site and Views are handled differently from static files, you will need to have two "Themes/[MyTheme]" folders - one next to the "Views" folder for holding Views and Partials, and one inside the wwwroot folder to hold all static theme-related files (css, js, images). Your Theme name should be the same in both "Themes" folders. 
+
 On your root Document Type, use the included "Theme Picker" Property Type to add a property for the site's chosen theme. 
 
 
 In appSettings.json add this section at the root-level (aka a sibling of 'Umbraco', not a child):
 
 	"DragonflyTheming": {
-		"ThemesAreInWwwRoot": false,
-		"ThemesRootFolder": "~/Themes",
-		"ThemePickerPropertyAlias": "Theme",
-		"CssFilePickerPropertyAlias": "SiteCss",
-		"EnableDefaultThemeController": false,
-		"FallbackAssetsCssFolder": "~/css",
-		"ThemedAssetsCssFolder": "Css",
-		"FallbackAssetsJsFolder": "~/scripts",
-		"ThemedAssetsJsFolder": "Js"
-	}
+        "ThemeViewsAreInWwwRoot": false,
+        "ThemesRootFolderName": "Themes",
+        "ThemePickerPropertyAlias": "Theme",
+        "CssFilePickerPropertyAlias": "SiteCss",
+        "EnableDefaultThemeController": false,
+        "FallbackAssetsCssFolder": "css",
+        "ThemedAssetsCssFolder": "Css",
+        "FallbackAssetsJsFolder": "scripts",
+        "ThemedAssetsJsFolder": "Js"
+    }
 
+
+In your Startup.cs file, add:
+
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+			...
+			app.UseStaticFiles();        
+        }
 
 The Controller which runs for each page request needs to determine the Themed View file to render the page with, so if you already have custom controllers operating in your site, be sure to include something that will route the theme correctly. For example:
 
@@ -188,13 +198,22 @@ If you have theme-specific configuration files of whatever type, they can be add
 You can get either the current theme's file, or the default, if none exists in the current theme in your custom code using `GetFinalThemePath()` with `Theming.PathType.Configs` (or use the shortcut - `GetThemeConfigsFolderPath()`).
 
 ## Changes from v7/v8 Version to v10 Version ##
+
 If you are updating an Umbraco site which was previously using Dragonfly Theming, there are a few things you might want to know that have changed.
 
 In terms of the code itself, there was some refactoring as well as bringing it into line with ASP.Net Core / Umbraco 10 best-practices (specifically better use of IoC / Dependency Injection). I've also added many more configurations for things which were otherwise hard-coded (such as folder locations, etc.).
 
 Some things you will need to be aware of while updating your Themes and any custom code for v10:
 
+- Your single "Theme/MyTheme" folder will need to be separated into two - one for the View files and one for the static files. (See the **Setup** section, above for details.)
 - The static "ThemeHelper" has been converted to a non-static "ThemeHelperService". You will need to inject it into your views like this: `@inject ThemeHelperService ThemeHelper` (Put this into "_ViewImports.cshtml" and you won't have to add it to every View manually.)
 - The HtmlHelpers and UrlHelpers have been moved to their own static Extensions class, so they are available as before, except you will now need to pass in the ThemeHelperService. ex: `@Url.ThemedAsset(ThemeHelper, thisTheme, "images/favicon.ico")`
 - The HtmlHelpers `RequiresThemedCss()`, `RequiresThemedJs()`, `RequiresThemedCssFolder()`, and `RequiresThemedJsFolder()` have been removed, since ClientDependency has been swapped out for Smidge. Take a look at the provided "_Master.cshtml" file (in the "Themes/~CopyForNewTheme/Views" folder) for example code using Smidge. You can also use whatever bundling framework you prefer, since now helpers are available to return themed file and folder paths.
 - All the included example Razor files have been updated as well, so if you are confused about anything, take a look at the contents of the "Themes/~CopyForNewTheme" folder, as well as "/Views/Partials/Grid/Bootstrap3WithTheming.cshtml" and "/Views/MacroPartials/~ExampleThemedMacro.cshtml"
+
+
+## Troubleshooting ##
+
+###Static Theme files are throwing 404 errors ##
+If your CSS, JavaScript, and other theme assets don't seem to be rendering, make sure they are getting included in your publishing. Also, double-check the **Setup** section, above, and make sure you have all proper configurations in place.
+

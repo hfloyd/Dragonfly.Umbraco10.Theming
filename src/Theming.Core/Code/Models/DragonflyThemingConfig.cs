@@ -9,8 +9,8 @@
         //AppSettings Config Section name
         public const string DragonflyTheming = "DragonflyTheming";
 
-        [JsonProperty("ThemesAreInWwwRoot")]
-        public bool ThemesAreInWwwRoot { get; set; } = true;
+        [JsonProperty("ThemeViewsAreInWwwRoot")]
+        public bool ThemeViewsAreInWwwRoot { get; set; } = false;
         
 
         [JsonProperty("EnableDefaultThemeController")]
@@ -23,14 +23,14 @@
         [JsonProperty("CssFilePickerPropertyAlias")]
         public string CssFilePickerPropertyAlias { get; set; } = "SiteCss";
 
-        [JsonProperty("ThemesRootFolder")]
-        public string ThemesRootFolder { get; set; } = "~/Themes";
+        [JsonProperty("ThemesRootFolderName")]
+        public string ThemesRootFolderName { get; set; } = "Themes";
 
         [JsonProperty("FallbackAssetsCssFolder")]
-        public string FallbackAssetsCssFolder { get; set; } = "~/css";
+        public string FallbackAssetsCssFolder { get; set; } = "css";
 
         [JsonProperty("FallbackAssetsJsFolder")]
-        public string FallbackAssetsJsFolder { get; set; } = "~/scripts";
+        public string FallbackAssetsJsFolder { get; set; } = "scripts";
 
         [JsonProperty("ThemedAssetsCssFolder")]
         public string ThemedAssetsCssFolder { get; set; } = "Css";
