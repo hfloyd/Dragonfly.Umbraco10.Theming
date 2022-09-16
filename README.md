@@ -214,7 +214,7 @@ Some things you will need to be aware of while updating your Themes and any cust
 
 ## Troubleshooting ##
 
-###Static Theme files are throwing 404 errors ##
+### Static Theme files are throwing 404 errors ###
 
 If your CSS, JavaScript, and other theme assets don't seem to be rendering, make sure they are getting included in your publishing. Also, double-check the **Setup** section, above, and make sure you have all proper configurations in place.
 
