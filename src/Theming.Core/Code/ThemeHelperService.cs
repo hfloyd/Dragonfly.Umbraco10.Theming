@@ -184,7 +184,13 @@
             var fileType = ConvertPathTypeToFileType(PathType);
             var virtualThemesRoot = (fileType == Theming.ThemeFileType.Views ? GetAllThemesViewsRoot(false) : GetAllThemesStaticFilesRoot(false));
             var baseThemePath = $"{virtualThemesRoot}{SiteThemeName}";
-            var viewName = Path.GetFileNameWithoutExtension(ViewOrFileName);
+
+            var viewPathAndNameNoExt = ViewOrFileName;
+            var ext = Path.GetExtension(ViewOrFileName);
+            if (ext != "")
+            {
+                viewPathAndNameNoExt = ViewOrFileName.Replace(ext, "");
+            }
 
             switch (PathType)
             {
@@ -200,13 +206,13 @@
                     break;
 
                 case Theming.PathType.View:
-                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/{viewName}.cshtml";
-                    themePath = $"{baseThemePath}/Views/{viewName}.cshtml";
+                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/{viewPathAndNameNoExt}.cshtml";
+                    themePath = $"{baseThemePath}/Views/{viewPathAndNameNoExt}.cshtml";
                     break;
 
                 case Theming.PathType.PartialView:
-                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/Partials/{viewName}.cshtml";
-                    themePath = $"{baseThemePath}/Views/Partials/{viewName}.cshtml";
+                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/Partials/{viewPathAndNameNoExt}.cshtml";
+                    themePath = $"{baseThemePath}/Views/Partials/{viewPathAndNameNoExt}.cshtml";
                     break;
 
                 case Theming.PathType.FormsThemesRoot:
@@ -216,8 +222,8 @@
                     break;
 
                 case Theming.PathType.GridEditor:
-                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/Partials/Grid/Editors/{viewName}.cshtml";
-                    themePath = $"{baseThemePath}/Views/Partials/Grid/Editors/{viewName}.cshtml";
+                    standardPath = AlternateStandardPath != "" ? AlternateStandardPath : $"~/Views/Partials/Grid/Editors/{viewPathAndNameNoExt}.cshtml";
+                    themePath = $"{baseThemePath}/Views/Partials/Grid/Editors/{viewPathAndNameNoExt}.cshtml";
                     break;
 
                 case Theming.PathType.ThemeStaticFilesRoot:
@@ -256,7 +262,7 @@
             switch (PathType)
             {
                 case Theming.PathType.ThemeViewsRoot:
-                    return Theming.ThemeFileType.Unknown;
+                    return Theming.ThemeFileType.Views;
                     break;
 
                 case Theming.PathType.ThemeStaticFilesRoot:

@@ -22,7 +22,7 @@
 		<RepositoryUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</RepositoryUrl>
 
 		<PackageTags>Umbraco 10</PackageTags>
-		<PackageReleaseNotes>Fixes to static file serving</PackageReleaseNotes>
+		<PackageReleaseNotes>Bug fixes</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<!-- Author Info + Legal-->
@@ -40,7 +40,7 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Web</AssemblyName>
-		<Version>0.2.0</Version>
+		<Version>0.2.3</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
@@ -73,21 +73,25 @@
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
 		</Content>
+		
 		<Content Include="wwwroot\Themes\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
 		</Content>
+		
 		<Content Include="Themes\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
 		</Content>
+		
 		<Content Include="Views\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
 		</Content>
+		
 		<None Include="build\**\*.*">
 			<Pack>True</Pack>
 			<PackagePath>buildTransitive</PackagePath>
