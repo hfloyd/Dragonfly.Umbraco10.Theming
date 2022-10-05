@@ -1,0 +1,26 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <DragonflyUmbracoThemingWebContentFilesPath>$(MSBuildThisFileDirectory)..\content\**\*.*</DragonflyUmbracoThemingWebContentFilesPath>
+    </PropertyGroup>
+
+    <Target Name="CopyDragonflyUmbracoThemingWebAssets" BeforeTargets="Build">
+        <ItemGroup>
+            <DragonflyUmbracoThemingWebContentFiles Include="$(DragonflyUmbracoThemingWebContentFilesPath)" />
+        </ItemGroup>
+        <Message Text="Copying Dragonfly.UmbracoTheming files: $(DragonflyUmbracoThemingWebContentFilesPath) - #@(DragonflyUmbracoThemingWebContentFiles->Count()) files"  Importance="high" />
+        <Copy 
+        SourceFiles="@(DragonflyUmbracoThemingWebContentFiles)" 
+        DestinationFiles="@(DragonflyUmbracoThemingWebContentFiles->'$(MSBuildProjectDirectory)\%(RecursiveDir)%(Filename)%(Extension)')" 
+        SkipUnchangedFiles="true" />
+    </Target>
+
+    <Target Name="ClearDragonflyUmbracoThemingWebAssets" BeforeTargets="Clean">
+        <ItemGroup>
+            <DragonflyUmbracoThemingWebDir Include="$(MSBuildProjectDirectory)\App_Plugins\Dragonfly.UmbracoTheming\" />
+        </ItemGroup>
+        <Message Text="Clear old Dragonfly.UmbracoTheming data"  Importance="high" />
+        <RemoveDir Directories="@(DragonflyUmbracoThemingWebDir)"  />
+    </Target>
+
+</Project>

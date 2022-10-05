@@ -24,9 +24,8 @@
         }
     ],
     
-    "javascript": [
-        //array of files we want to inject into the application on app_start    
-		'~/App_Plugins/Dragonfly.UmbracoTheming/PropertyEditors/themepicker.controller.js',
-		'~/App_Plugins/Dragonfly.UmbracoTheming/PropertyEditors/cssoverridepicker.controller.js'
+    "javascript": [  
+		"~/App_Plugins/Dragonfly.UmbracoTheming/PropertyEditors/themepicker.controller.js",
+		"~/App_Plugins/Dragonfly.UmbracoTheming/PropertyEditors/cssoverridepicker.controller.js"
     ]
 }
