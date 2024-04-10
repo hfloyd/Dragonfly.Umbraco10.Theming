@@ -13,15 +13,15 @@
 	<!-- Package Description-->
 	<PropertyGroup>
 		<PackageId>Dragonfly.Umbraco10.Theming.Web</PackageId>
-		<Title>Dragonfly Umbraco 10 Theming Core</Title>
-		<Product>Dragonfly Umbraco 10 Theming</Product>
+		<Title>Dragonfly Umbraco 10 Theming Web</Title>
+		<Product>Dragonfly Umbraco Theming</Product>
 		<Description>A Theming system for Umbraco [Full install for website] (min. Umbraco 10.0)</Description>
 
 		<PackageProjectUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</PackageProjectUrl>
 		<RepositoryType>GIT</RepositoryType>
 		<RepositoryUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</RepositoryUrl>
 
-		<PackageTags>Umbraco 10</PackageTags>
+		<PackageTags>Umbraco; Umbraco-10; Umbraco-11; Umbraco-12; Umbraco-13; umbraco-marketplace</PackageTags>
 		<PackageReleaseNotes></PackageReleaseNotes>
 	</PropertyGroup>
 
@@ -40,14 +40,19 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Web</AssemblyName>
-		<Version>1.0.0</Version>
+		<Version>1.1.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
 		<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
+		<PackageIcon>Dragonfly-UmbracoTheming-128.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="..\..\Dragonfly-UmbracoTheming-128.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="..\..\LICENSE.md">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
@@ -60,10 +65,9 @@
 
 	<!-- Packages-->
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms" Version="10.0.1" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Core" Version="10.0.1" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.1" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.1" PrivateAssets="All" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0,14.0.0]" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,14.0.0]" PrivateAssets="All" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0,14.0.0]" PrivateAssets="All" />
 	</ItemGroup>
 
 	<!--Include App_Plugins, Themes, Views & targets file-->

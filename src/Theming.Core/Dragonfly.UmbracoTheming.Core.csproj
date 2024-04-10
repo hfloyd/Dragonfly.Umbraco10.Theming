@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -14,7 +14,7 @@
 	<PropertyGroup>
 		<PackageId>Dragonfly.Umbraco10.Theming.Core</PackageId>
 		<Title>Dragonfly Umbraco 10 Theming Core</Title>
-		<Product>Dragonfly Umbraco 10 Theming</Product>
+		<Product>Dragonfly Umbraco Theming</Product>
 		<Description>A Theming system for Umbraco [.DLL ONLY (for class projects)] (min. Umbraco 10.0)</Description>
 
 		<PackageProjectUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</PackageProjectUrl>
@@ -41,15 +41,20 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Core</AssemblyName>
-		<Version>1.0.0</Version>
+		<Version>1.1.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
 		<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
+		<PackageIcon>Dragonfly-UmbracoTheming-128.png</PackageIcon>
 	</PropertyGroup>
 
 	
 	<ItemGroup>
+		<None Include="..\..\Dragonfly-UmbracoTheming-128.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="..\..\LICENSE.md">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
@@ -62,10 +67,9 @@
 	
 	<!-- Packages-->
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms" Version="10.0.1" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Core" Version="10.0.1" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.1" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.1" PrivateAssets="All" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0,14.0.0]" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,14.0.0]" PrivateAssets="All" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0,14.0.0]" PrivateAssets="All" />
 	</ItemGroup>
 
 

@@ -5,11 +5,12 @@
 
 
     /// <summary>
-    /// Configuration settings read from a config XML file
+    /// Configuration settings read from a config file
     /// </summary>
     [XmlRoot("ThemeSettings")]    
     public class ThemeConfig
     {
+    	 #region Properties
         public string ThemeName { get; set; } = "";
         public string ConfigPath { get; set; } = "";
         public DateTime ConfigTimestamp { get; set; }
@@ -31,6 +32,7 @@
 
         [XmlElement] 
         public string Description { get; set; } = "";
+  #endregion
 
     }
 }

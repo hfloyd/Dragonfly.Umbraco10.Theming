@@ -382,12 +382,31 @@
         /// <param name="SiteThemeName"></param>
         /// <param name="RelativeAssetPath">Path to file inside [theme]/Assets/ folder</param>
         /// <returns>String representing the file path</returns>
-        public string GetThemedAssetFile(string SiteThemeName, string RelativeAssetPath)
+        public string GetThemedAssetFile(string SiteThemeName, string RelativeAssetPath,bool UseFallback = true)
         {
             var themeRoot = GetFinalThemePath(SiteThemeName, Theming.PathType.ThemeStaticFilesRoot);
             // var absolutePath = themeRoot.EnsureEndsWith('/');
             var virtualPath = (themeRoot + "Assets/" + RelativeAssetPath).EnsureStartsWith("/");
-            return virtualPath;
+            
+            if (!UseFallback)
+            {
+	            return virtualPath;
+            }
+            else
+            {
+	            //Check for file existence
+	            if (System.IO.File.Exists(MapThemePath(virtualPath, Theming.ThemeFileType.StaticFiles)))
+	            {
+		            return virtualPath;
+	            }
+	            else
+	            {
+		            var defaultFolderPath = _ConfigOptions.FallbackAssetsFolder;
+		            var defaultFilePath = $"{GetNonThemedFolder(defaultFolderPath)}{RelativeAssetPath}";
+		            return defaultFilePath;
+	            }
+            }
+
         }
 
         /// <summary>

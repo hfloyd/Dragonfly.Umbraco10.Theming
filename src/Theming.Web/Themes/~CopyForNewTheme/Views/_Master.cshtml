@@ -3,20 +3,20 @@
 	Layout = null;
 
 	var currentPage = Model;
-	var thisTheme = Model.Value<string>("Theme", fallback: Fallback.ToAncestors);
-	var templateFilePath = ThemeHelper.GetThemeViewPath(thisTheme, Model.GetTemplateAlias());
+	var thisTheme = currentPage.Value<string>("Theme", fallback: Fallback.ToAncestors);
+	var templateFilePath = ThemeHelper.GetThemeViewPath(thisTheme, currentPage.GetTemplateAlias());
 
 	//Examples of Bundling using Smidge
-	SmidgeHelper //.CreateCssBundle("master-css-bundle")
-		.RequiresCss(new CssFile("~/css/lib/bootstrap.min.css") { Order = 1 }) //Shared file
-		.RequiresCss(new CssFile(ThemeHelper.GetThemedCssFile(thisTheme, "style.css")) { Order = 2 }); //Single Theme-specific file
+	SmidgeHelper.CreateCssBundle($"{thisTheme}-master-css-bundle")
+		.RequiresCss(new CssFile("~/libs/bootstrap-5.1.3-dist/css/bootstrap.css") { Order = 1 }); //Shared file
+	//	.RequiresCss(new CssFile(ThemeHelper.GetThemedCssFile(thisTheme, "style.css")) { Order = 2 }); //Single Theme-specific file
 
-	SmidgeHelper.CreateJsBundle("head-js-bundle")
-		.RequiresJs(new JavaScriptFile("~/scripts/lib/jquery.js") { Order = 1 }); //Shared file
+	SmidgeHelper.CreateJsBundle($"{thisTheme}-head-js-bundle")
+		.RequiresJs(new JavaScriptFile("~/libs/bootstrap-5.1.3-dist/js/bootstrap.js") { Order = 1 }); //Shared file
 
-	SmidgeHelper.CreateJsBundle("footer-js-bundle")
-		.RequiresJs(new JavaScriptFile("~/scripts/lib/bootstrap.min.js") { Order = 1 }) //Shared file
-		.RequiresJs(ThemeHelper.GetThemedJsFolder(thisTheme)); //Get the entire JS folder for the Theme
+	SmidgeHelper.CreateJsBundle($"{thisTheme}-footer-js-bundle")
+	//	.RequiresJs(new JavaScriptFile("~/scripts/lib/bootstrap.min.js") { Order = 1 }) //Shared file
+		.RequiresJs(ThemeHelper.GetThemedAssetFolder(thisTheme, "scripts"));
 }
 <!DOCTYPE html>
 <html>
@@ -37,10 +37,10 @@
 
 	<!-- Example of using Smidge bundles -->
 	<environment names="Development">
-		@await SmidgeHelper.CssHereAsync(debug: true)
+		@await SmidgeHelper.CssHereAsync($"{thisTheme}-master-css-bundle",debug: true)
 	</environment>
 	<environment exclude="Development">
-		@await SmidgeHelper.CssHereAsync(debug: false)
+		@await SmidgeHelper.CssHereAsync($"{thisTheme}-master-css-bundle",debug: false)
 	</environment>
 
 
@@ -49,10 +49,10 @@
 	<script src="@Url.ThemedAsset(ThemeHelper,thisTheme, "js/myscript.js")"></script>
 	<!-- Example of using Smidge bundles -->
 	<environment names="Development">
-		@await SmidgeHelper.JsHereAsync("head-js-bundle",debug: true)
+		@await SmidgeHelper.JsHereAsync($"{thisTheme}-head-js-bundle",debug: true)
 	</environment>
 	<environment exclude="Development">
-		@await SmidgeHelper.JsHereAsync("head-js-bundle",debug: false)
+		@await SmidgeHelper.JsHereAsync($"{thisTheme}-head-js-bundle",debug: false)
 	</environment>
 	@RenderSection("HeadScripts", required: false)
 
@@ -74,30 +74,22 @@
 
 	<div class="page">
 		<div class="wrap">
-			<header>
-				<a href="Site.Url" class="logo pull-left">Home</a>
-				@Html.ThemedPartial(ThemeHelper, thisTheme, "Nav_Main", Model)
-			</header>
-
-			<p><b>NOTE:</b> All Site Design Templates should be created in the appropriate '/Themes/' folder.</p>
+			@Html.ThemedPartial(ThemeHelper, thisTheme, "_Header", Model)
 
 			@RenderBody() @*CHILD TEMPLATE BODY HERE*@
 
 		</div>
 
-		<footer>
-			<div class="container">
-				@Html.ThemedPartial(ThemeHelper,thisTheme, "Nav_Footer", Model)
-			</div>
-		</footer>
+	@Html.ThemedPartial(ThemeHelper,thisTheme, "_Footer", Model)
+		
 	</div>
 
 	<!-- Page Footer Script Section Start -->
 	<environment names="Development">
-		@await SmidgeHelper.JsHereAsync( "footer-js-bundle",debug: true)
+		@await SmidgeHelper.JsHereAsync($"{thisTheme}-footer-js-bundle",debug: true)
 	</environment>
 	<environment exclude="Development">
-		@await SmidgeHelper.JsHereAsync( "footer-js-bundle", debug: false)
+		@await SmidgeHelper.JsHereAsync($"{thisTheme}-footer-js-bundle", debug: false)
 	</environment>
 
 	@RenderSection("FooterScripts", required: false)

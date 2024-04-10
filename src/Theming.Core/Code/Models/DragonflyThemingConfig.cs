@@ -26,18 +26,20 @@
         [JsonProperty("ThemesRootFolderName")]
         public string ThemesRootFolderName { get; set; } = "Themes";
 
-        [JsonProperty("FallbackAssetsCssFolder")]
-        public string FallbackAssetsCssFolder { get; set; } = "css";
-
-        [JsonProperty("FallbackAssetsJsFolder")]
-        public string FallbackAssetsJsFolder { get; set; } = "scripts";
-
         [JsonProperty("ThemedAssetsCssFolder")]
         public string ThemedAssetsCssFolder { get; set; } = "Css";
 
         [JsonProperty("ThemedAssetsJsFolder")]
         public string ThemedAssetsJsFolder { get; set; } = "Js";
 
+        [JsonProperty("FallbackAssetsCssFolder")]
+        public string FallbackAssetsCssFolder { get; set; } = "/css";
+
+        [JsonProperty("FallbackAssetsJsFolder")]
+        public string FallbackAssetsJsFolder { get; set; } = "/scripts";
+        
+        [JsonProperty("FallbackAssetsFolder")]
+        public string FallbackAssetsFolder { get; set; } = "/Assets";
     }
 
    

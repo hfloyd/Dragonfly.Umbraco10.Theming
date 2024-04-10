@@ -1,0 +1,14 @@
+﻿@inherits UmbracoViewPage<IBaseModel>
+@{
+	var currentPage = Model.Page;
+	var thisTheme = Model.ThemeName;
+
+//TODO: Make dynamic
+}
+<!--PV:_Header-->
+<header>
+	<a href="Site.Url" class="logo pull-left">Home</a>
+	@Html.ThemedPartial(ThemeHelper, thisTheme, "_Nav_Main", Model)
+</header>
+
+<p><b>NOTE:</b> All Site Design Templates should be created in the appropriate '/Themes/' folder.</p>

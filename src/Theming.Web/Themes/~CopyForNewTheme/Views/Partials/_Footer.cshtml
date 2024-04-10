@@ -1,0 +1,14 @@
+﻿@inherits UmbracoViewPage<IBaseModel>
+@{
+	var currentPage = Model.Page;
+	var thisTheme = Model.ThemeName;
+
+//TODO: Make dynamic
+}
+<!--PV:_Footer-->
+<footer>
+	<div class="container">
+		<h2>FOOTER HERE</h2>
+		@*@Html.ThemedPartial(ThemeHelper,thisTheme, "Nav_Footer", Model)*@
+	</div>
+</footer>

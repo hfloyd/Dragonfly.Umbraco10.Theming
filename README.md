@@ -10,7 +10,7 @@ Credit goes to [Shannon Deminick's *Articulate* package](https://github.com/Shaz
 **NOTE:** This project was ported from the [v8 version](https://github.com/hfloyd/Dragonfly.Umbraco8Theming). Please [report any issues](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming/issues) you experience.
 
 ## Installation ##
-Generally, you will want to install the .Web version of the package into your Umbraco project, which includes the App_Plugins, a setup of the Themes folder, and example Razor files:
+Generally, you will want to install the .Web version of the package into your Umbraco project, which includes the App_Plugins, a setup of the Themes folders, and example Razor files:
 
 [![Nuget Downloads](https://buildstats.info/nuget/Dragonfly.Umbraco10.Theming.Web)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Web/)
 
@@ -44,10 +44,11 @@ In appSettings.json add this section at the root-level (aka a sibling of 'Umbrac
         "ThemePickerPropertyAlias": "Theme",
         "CssFilePickerPropertyAlias": "SiteCss",
         "EnableDefaultThemeController": false,
-        "FallbackAssetsCssFolder": "css",
         "ThemedAssetsCssFolder": "Css",
-        "FallbackAssetsJsFolder": "scripts",
-        "ThemedAssetsJsFolder": "Js"
+        "ThemedAssetsJsFolder": "Js",
+        "FallbackAssetsFolder": "/Assets",
+        "FallbackAssetsJsFolder": "/scripts",
+        "FallbackAssetsCssFolder": "/css"
     }
 
 
@@ -186,8 +187,9 @@ You can also have default fallback versions of certain CSS/JS files in the share
 
 	"DragonflyTheming": {
 		...
-		"FallbackAssetsCssFolder": "~/css",
-		"FallbackAssetsJsFolder": "~/scripts",
+		"FallbackAssetsFolder": "/Assets",
+		"FallbackAssetsCssFolder": "/css",
+		"FallbackAssetsJsFolder": "/scripts",
 		...
 	}
 
@@ -208,7 +210,7 @@ Some things you will need to be aware of while updating your Themes and any cust
 - Your single "Theme/MyTheme" folder will need to be separated into two - one for the View files and one for the static files. (See the **Setup** section, above for details.)
 - The static "ThemeHelper" has been converted to a non-static "ThemeHelperService". You will need to inject it into your views like this: `@inject ThemeHelperService ThemeHelper` (Put this into "_ViewImports.cshtml" and you won't have to add it to every View manually.)
 - The HtmlHelpers and UrlHelpers have been moved to their own static Extensions class, so they are available as before, except you will now need to pass in the ThemeHelperService. ex: `@Url.ThemedAsset(ThemeHelper, thisTheme, "images/favicon.ico")`
-- The HtmlHelpers `RequiresThemedCss()`, `RequiresThemedJs()`, `RequiresThemedCssFolder()`, and `RequiresThemedJsFolder()` have been removed, since ClientDependency has been swapped out for Smidge. Take a look at the provided "_Master.cshtml" file (in the "Themes/~CopyForNewTheme/Views" folder) for example code using Smidge. You can also use whatever bundling framework you prefer, since now helpers are available to return themed file and folder paths.
+- The HtmlHelpers `RequiresThemedCss()`, `RequiresThemedJs()`, `RequiresThemedCssFolder()`, and `RequiresThemedJsFolder()` have been removed, since ClientDependency has been replaced by Smidge. Take a look at the provided "_Master.cshtml" file (in the "Themes/~CopyForNewTheme/Views" folder) for example code using Smidge. You can also use whatever bundling framework you prefer, since now helpers are available to return themed file and folder paths.
 - All the included example Razor files have been updated as well, so if you are confused about anything, take a look at the contents of the "Themes/~CopyForNewTheme" folder, as well as "/Views/Partials/Grid/Bootstrap3WithTheming.cshtml" and "/Views/MacroPartials/~ExampleThemedMacro.cshtml"
 
 
