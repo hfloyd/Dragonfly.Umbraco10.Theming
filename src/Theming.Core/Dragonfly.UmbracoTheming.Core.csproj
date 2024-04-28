@@ -22,7 +22,7 @@
 		<RepositoryUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</RepositoryUrl>
 
 		<PackageTags>Umbraco 10</PackageTags>
-		<PackageReleaseNotes></PackageReleaseNotes>
+	
 
 	</PropertyGroup>
 
@@ -41,10 +41,11 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Core</AssemblyName>
-		<Version>1.1.0</Version>
+		<Version>1.2.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
+		<PackageReleaseNotes>Fixing Config bug</PackageReleaseNotes>
 		<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
 		<PackageIcon>Dragonfly-UmbracoTheming-128.png</PackageIcon>
 	</PropertyGroup>

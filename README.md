@@ -52,13 +52,6 @@ In appSettings.json add this section at the root-level (aka a sibling of 'Umbrac
     }
 
 
-In your Startup.cs file, add:
-
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-			...
-			app.UseStaticFiles();        
-        }
 
 The Controller which runs for each page request needs to determine the Themed View file to render the page with, so if you already have custom controllers operating in your site, be sure to include something that will route the theme correctly. For example:
 

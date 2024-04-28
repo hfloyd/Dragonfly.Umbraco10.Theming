@@ -22,7 +22,7 @@
 		<RepositoryUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</RepositoryUrl>
 
 		<PackageTags>Umbraco; Umbraco-10; Umbraco-11; Umbraco-12; Umbraco-13; umbraco-marketplace</PackageTags>
-		<PackageReleaseNotes></PackageReleaseNotes>
+		
 	</PropertyGroup>
 
 	<!-- Author Info + Legal-->
@@ -40,10 +40,11 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Web</AssemblyName>
-		<Version>1.1.0</Version>
+		<Version>1.2.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
+		<PackageReleaseNotes>Fixing Config bug</PackageReleaseNotes>
 		<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
 		<PackageIcon>Dragonfly-UmbracoTheming-128.png</PackageIcon>
 	</PropertyGroup>
@@ -78,7 +79,7 @@
 			<Pack>True</Pack>
 		</Content>
 		
-		<Content Include="wwwroot\Themes\**\*.*">
+		<Content Include="wwwroot\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>

@@ -17,7 +17,7 @@
         public bool EnableDefaultThemeController { get; set; } = false;
 
         [JsonProperty("ThemePickerPropertyAlias")]
-        public string ThemePropertyAlias { get; set; } = "Theme";
+        public string ThemePickerPropertyAlias { get; set; } = "Theme";
 
 
         [JsonProperty("CssFilePickerPropertyAlias")]

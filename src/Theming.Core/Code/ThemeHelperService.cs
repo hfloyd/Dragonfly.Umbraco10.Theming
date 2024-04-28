@@ -55,7 +55,7 @@
         /// <returns></returns>
         public string ThemePropertyAlias()
         {
-            var themeProp = _ConfigOptions.ThemePropertyAlias;
+            var themeProp = _ConfigOptions.ThemePickerPropertyAlias;
             if (!string.IsNullOrEmpty(themeProp))
             {
                 return themeProp;
