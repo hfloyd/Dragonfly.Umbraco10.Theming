@@ -41,11 +41,11 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Core</AssemblyName>
-		<Version>1.2.0</Version>
+		<Version>1.2.2</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
-		<PackageReleaseNotes>Fixing Config bug</PackageReleaseNotes>
+		<PackageReleaseNotes>Fixing Dependencies</PackageReleaseNotes>
 		<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
 		<PackageIcon>Dragonfly-UmbracoTheming-128.png</PackageIcon>
 	</PropertyGroup>
@@ -68,9 +68,9 @@
 	
 	<!-- Packages-->
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0,14.0.0]" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,14.0.0]" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0,14.0.0]" PrivateAssets="All" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0,13.999.999]" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,13.999.999]" PrivateAssets="All" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0,13.999.999]" PrivateAssets="All" />
 	</ItemGroup>
 
 
