@@ -1,0 +1,14 @@
+{
+  "id": "DragonflyUmbracoTheming",
+  "name": "DragonflyUmbracoTheming",
+  "version": "0.0.0",
+  "allowTelemetry": true,
+  "extensions": [
+    {
+      "name": "Dragonfly Umbraco 10 Theming Bundle",
+      "alias": "DragonflyUmbracoTheming.Bundle",
+      "type": "bundle",
+      "js": "/App_Plugins/DragonflyUmbracoTheming/dragonfly-umbraco-theming.js"
+    }
+  ]
+}

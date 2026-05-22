@@ -1,4 +1,4 @@
-﻿@inherits UmbracoViewPage<IPublishedContent>
+@inherits UmbracoViewPage<IPublishedContent>
 @{
 	Layout = null;
 
@@ -6,17 +6,6 @@
 	var thisTheme = currentPage.Value<string>("Theme", fallback: Fallback.ToAncestors);
 	var templateFilePath = ThemeHelper.GetThemeViewPath(thisTheme, currentPage.GetTemplateAlias());
 
-	//Examples of Bundling using Smidge
-	SmidgeHelper.CreateCssBundle($"{thisTheme}-master-css-bundle")
-		.RequiresCss(new CssFile("~/libs/bootstrap-5.1.3-dist/css/bootstrap.css") { Order = 1 }); //Shared file
-	//	.RequiresCss(new CssFile(ThemeHelper.GetThemedCssFile(thisTheme, "style.css")) { Order = 2 }); //Single Theme-specific file
-
-	SmidgeHelper.CreateJsBundle($"{thisTheme}-head-js-bundle")
-		.RequiresJs(new JavaScriptFile("~/libs/bootstrap-5.1.3-dist/js/bootstrap.js") { Order = 1 }); //Shared file
-
-	SmidgeHelper.CreateJsBundle($"{thisTheme}-footer-js-bundle")
-	//	.RequiresJs(new JavaScriptFile("~/scripts/lib/bootstrap.min.js") { Order = 1 }) //Shared file
-		.RequiresJs(ThemeHelper.GetThemedAssetFolder(thisTheme, "scripts"));
 }
 <!DOCTYPE html>
 <html>
@@ -35,25 +24,11 @@
 	<!-- Example of single themed file -->
 	<link rel="stylesheet" href="@Url.ThemedAsset(ThemeHelper, thisTheme, "css/custom.css")" />
 
-	<!-- Example of using Smidge bundles -->
-	<environment names="Development">
-		@await SmidgeHelper.CssHereAsync($"{thisTheme}-master-css-bundle",debug: true)
-	</environment>
-	<environment exclude="Development">
-		@await SmidgeHelper.CssHereAsync($"{thisTheme}-master-css-bundle",debug: false)
-	</environment>
-
-
+	
 	<!-- Site-wide HEAD Js -->
 	<!-- Example of single themed file -->
 	<script src="@Url.ThemedAsset(ThemeHelper,thisTheme, "js/myscript.js")"></script>
-	<!-- Example of using Smidge bundles -->
-	<environment names="Development">
-		@await SmidgeHelper.JsHereAsync($"{thisTheme}-head-js-bundle",debug: true)
-	</environment>
-	<environment exclude="Development">
-		@await SmidgeHelper.JsHereAsync($"{thisTheme}-head-js-bundle",debug: false)
-	</environment>
+
 	@RenderSection("HeadScripts", required: false)
 
 </head>
@@ -84,14 +59,7 @@
 		
 	</div>
 
-	<!-- Page Footer Script Section Start -->
-	<environment names="Development">
-		@await SmidgeHelper.JsHereAsync($"{thisTheme}-footer-js-bundle",debug: true)
-	</environment>
-	<environment exclude="Development">
-		@await SmidgeHelper.JsHereAsync($"{thisTheme}-footer-js-bundle", debug: false)
-	</environment>
-
+	
 	@RenderSection("FooterScripts", required: false)
 </body>
 </html>

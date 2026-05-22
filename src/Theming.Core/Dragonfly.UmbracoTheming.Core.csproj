@@ -1,13 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+		<TargetFramework>net10.0</TargetFramework>
+
 		<ContentTargetFolders>content</ContentTargetFolders>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
-		<!--<ImplicitUsings>enable</ImplicitUsings>-->
 		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<StaticWebAssetBasePath>/</StaticWebAssetBasePath>
 	</PropertyGroup>
 
 	<!-- Package Description-->
@@ -18,43 +19,42 @@
 		<Description>A Theming system for Umbraco [.DLL ONLY (for class projects)] (min. Umbraco 10.0)</Description>
 
 		<PackageProjectUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</PackageProjectUrl>
-		<RepositoryType>GIT</RepositoryType>
+		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</RepositoryUrl>
 
-		<PackageTags>Umbraco 10</PackageTags>
-	
-
+		<PackageTags>Umbraco; Umbraco-17</PackageTags>
+		<PackageIcon>Dragonfly-UmbracoTheming-128.png</PackageIcon>
 	</PropertyGroup>
 
 	<!-- Author Info + Legal-->
 	<PropertyGroup>
 		<Authors>HFloyd</Authors>
 		<Company>Heather Floyd</Company>
-		<Copyright>Heather Floyd [www.HeatherFloyd.com]</Copyright>
+		<Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Heather Floyd [www.HeatherFloyd.com]</Copyright>
 
-		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReadmeFile>README_nuget.md</PackageReadmeFile>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 	</PropertyGroup>
-	
+
 	<!-- Assembly Info-->
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Core</AssemblyName>
-		<Version>1.2.2</Version>
+		<!-- REMINDER: When updating the MAJOR version, also update '\src\Directory.Packages.props' -->
+		<Version>17.0.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
 		<PackageReleaseNotes>Fixing Dependencies</PackageReleaseNotes>
-		<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
-		<PackageIcon>Dragonfly-UmbracoTheming-128.png</PackageIcon>
+		<VersionSuffix Condition="'$(Configuration)'=='Debug'">-prerelease$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
 	</PropertyGroup>
 
-	
+
 	<ItemGroup>
 		<None Include="..\..\Dragonfly-UmbracoTheming-128.png">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
 		</None>
 		<None Include="..\..\LICENSE.md">
 			<Pack>True</Pack>
@@ -64,21 +64,41 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+		<None Include="..\..\docs\README_nuget.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
-	
+
+	<ItemGroup>
+		<!-- Dont include the client folder as part of packaging nuget build -->
+		<Compile Remove="Client\**" />
+		<Compile Remove="Code\PropertyEditors-old\**" />
+		<Compile Remove="Code\PropertyEditors\**" />
+		<EmbeddedResource Remove="Client\**" />
+		<EmbeddedResource Remove="Code\PropertyEditors-old\**" />
+		<EmbeddedResource Remove="Code\PropertyEditors\**" />
+		<None Remove="Client\**" />
+		<None Remove="Code\PropertyEditors-old\**" />
+		<None Remove="Code\PropertyEditors\**" />
+
+		<!-- However make the Umbraco-package.json included for dotnet pack or nuget package and visible to the solution -->
+	</ItemGroup>
+
 	<!-- Packages-->
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0,13.999.999]" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,13.999.999]" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0,13.999.999]" PrivateAssets="All" />
+		<PackageReference Include="Umbraco.Cms.Core" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" />
 	</ItemGroup>
 
 
-	
 	<!--Include App_Plugins & targets file: NONE-->
-	
+
 	<Import Project="..\Custom.targets" />
-	
+
 	<!-- Excluded Files -->
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -1,12 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+		<TargetFramework>net10.0</TargetFramework>
+
 		<ContentTargetFolders>content</ContentTargetFolders>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 
-		<!--	<ImplicitUsings>enable</ImplicitUsings>-->
 		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<StaticWebAssetBasePath>/</StaticWebAssetBasePath>
 	</PropertyGroup>
 
 
@@ -18,20 +20,20 @@
 		<Description>A Theming system for Umbraco [Full install for website] (min. Umbraco 10.0)</Description>
 
 		<PackageProjectUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</PackageProjectUrl>
-		<RepositoryType>GIT</RepositoryType>
+		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</RepositoryUrl>
 
-		<PackageTags>Umbraco; Umbraco-10; Umbraco-11; Umbraco-12; Umbraco-13; umbraco-marketplace</PackageTags>
-		
+		<PackageTags>Umbraco; Umbraco-17; umbraco-marketplace</PackageTags>
+		<PackageIcon>Dragonfly-UmbracoTheming-128.png</PackageIcon>
 	</PropertyGroup>
 
 	<!-- Author Info + Legal-->
 	<PropertyGroup>
 		<Authors>HFloyd</Authors>
 		<Company>Heather Floyd</Company>
-		<Copyright>Heather Floyd [www.HeatherFloyd.com]</Copyright>
+		<Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Heather Floyd [www.HeatherFloyd.com]</Copyright>
 
-		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReadmeFile>README_nuget.md</PackageReadmeFile>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 	</PropertyGroup>
@@ -40,19 +42,18 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Web</AssemblyName>
-		<Version>1.2.2</Version>
+		<Version>17.0.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
 		<PackageReleaseNotes>Fixing Dependencies</PackageReleaseNotes>
-		<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
-		<PackageIcon>Dragonfly-UmbracoTheming-128.png</PackageIcon>
+		<VersionSuffix Condition="'$(Configuration)'=='Debug'">-prerelease$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Include="..\..\Dragonfly-UmbracoTheming-128.png">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
 		</None>
 		<None Include="..\..\LICENSE.md">
 			<Pack>True</Pack>
@@ -62,13 +63,31 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+		<None Include="..\..\docs\README_nuget.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Dont include the client folder as part of packaging nuget build -->
+		<Content Remove="Client\**" />
+
+		<!-- However make the Umbraco-package.json included for dotnet pack or nuget package and visible to the solution -->
+		<None Include="Client\public\umbraco-package.json" Pack="false" />
 	</ItemGroup>
 
 	<!-- Packages-->
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0,13.999.999]" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,13.999.999]" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0,13.999.999]" PrivateAssets="All" />
+		<PackageReference Include="Umbraco.Cms.Core" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Theming.Core\Dragonfly.UmbracoTheming.Core.csproj" />
 	</ItemGroup>
 
 	<!--Include App_Plugins, Themes, Views & targets file-->
@@ -78,69 +97,72 @@
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
 		</Content>
-		
+
 		<Content Include="wwwroot\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
 		</Content>
-		
+
 		<Content Include="Themes\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
 		</Content>
-		
+
 		<Content Include="Views\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
 		</Content>
-		
+
 		<None Include="build\**\*.*">
 			<Pack>True</Pack>
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
 	</ItemGroup>
+
+
 	<ItemGroup>
-	  <None Remove="wwwroot\Themes\~CopyForNewTheme\Assets\README.txt" />
-	  <None Remove="wwwroot\Themes\~CopyForNewTheme\Configs\README.txt" />
-	  <None Remove="wwwroot\Themes\~CopyForNewTheme\Theme.config" />
-	  <None Remove="wwwroot\Themes\~CssOverrides\CSS-Override-Files-Readme.txt" />
-	  <None Remove="wwwroot\Themes\~CssOverrides\empty.css" />
-	  <None Remove="wwwroot\Themes\~DefaultConfigs\README.txt" />
+		<None Remove="Directory.Packages.props" />
+		<None Remove="wwwroot\Themes\~CopyForNewTheme\Assets\README.txt" />
+		<None Remove="wwwroot\Themes\~CopyForNewTheme\Configs\README.txt" />
+		<None Remove="wwwroot\Themes\~CopyForNewTheme\Theme.config" />
+		<None Remove="wwwroot\Themes\~CssOverrides\CSS-Override-Files-Readme.txt" />
+		<None Remove="wwwroot\Themes\~CssOverrides\empty.css" />
+		<None Remove="wwwroot\Themes\~DefaultConfigs\README.txt" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Include="wwwroot\Themes\~CopyForNewTheme\Assets\README.txt">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-	    <Pack>True</Pack>
-	  </Content>
-	  <Content Include="wwwroot\Themes\~CopyForNewTheme\Configs\README.txt">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-	    <Pack>True</Pack>
-	  </Content>
-	  <Content Include="wwwroot\Themes\~CopyForNewTheme\Theme.config">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-	    <Pack>True</Pack>
-	  </Content>
-	  <Content Include="wwwroot\Themes\~CssOverrides\CSS-Override-Files-Readme.txt">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-	    <Pack>True</Pack>
-	  </Content>
-	  <Content Include="wwwroot\Themes\~CssOverrides\empty.css">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-	    <Pack>True</Pack>
-	  </Content>
-	  <Content Include="wwwroot\Themes\~DefaultConfigs\README.txt">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-	    <Pack>True</Pack>
-	  </Content>
+		<Content Include="wwwroot\Themes\~CopyForNewTheme\Assets\README.txt">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+			<Pack>True</Pack>
+		</Content>
+		<Content Include="wwwroot\Themes\~CopyForNewTheme\Configs\README.txt">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+			<Pack>True</Pack>
+		</Content>
+		<Content Include="wwwroot\Themes\~CopyForNewTheme\Theme.config">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+			<Pack>True</Pack>
+		</Content>
+		<Content Include="wwwroot\Themes\~CssOverrides\CSS-Override-Files-Readme.txt">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+			<Pack>True</Pack>
+		</Content>
+		<Content Include="wwwroot\Themes\~CssOverrides\empty.css">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+			<Pack>True</Pack>
+		</Content>
+		<Content Include="wwwroot\Themes\~DefaultConfigs\README.txt">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+			<Pack>True</Pack>
+		</Content>
 	</ItemGroup>
 
 
@@ -149,9 +171,7 @@
 	</ItemGroup>
 
 
-	<ItemGroup>
-	  <ProjectReference Include="..\Theming.Core\Dragonfly.UmbracoTheming.Core.csproj" />
-	</ItemGroup>
+
 
 	<Import Project="..\Custom.targets" />
 

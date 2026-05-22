@@ -1,10 +1,10 @@
-﻿@inherits UmbracoViewPage<IBaseModel>
+@inherits UmbracoViewPage<IPublishedContent>
 @{
-	var currentPage = Model.Page;
-	var thisTheme = Model.ThemeName;
+	var currentPage = Model;
+	var thisTheme = "MyTheme";
 
-//TODO: Make dynamic
 }
+
 <!--PV:_Footer-->
 <footer>
 	<div class="container">
