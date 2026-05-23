@@ -10,11 +10,48 @@
 		<!--Set packages in the TestSite explicitly-->
 		<ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally> 
 	</PropertyGroup>
+	<ItemGroup>
+	  <AdditionalFiles Remove="Themes\BlueBubbles\Views\Partials\_Footer.cshtml" />
+	  <AdditionalFiles Remove="Themes\BlueBubbles\Views\Partials\_Header.cshtml" />
+	  <AdditionalFiles Remove="Themes\BlueBubbles\Views\Partials\_Nav_Main.cshtml" />
+	  <AdditionalFiles Remove="Themes\BlueBubbles\Views\_Master.cshtml" />
+	  <AdditionalFiles Remove="Themes\BlueBubbles\Views\_ViewImports.cshtml" />
+	  <AdditionalFiles Remove="Views\Blog.cshtml" />
+	  <AdditionalFiles Remove="Views\Blogpost.cshtml" />
+	  <AdditionalFiles Remove="Views\Contact.cshtml" />
+	  <AdditionalFiles Remove="Views\ContentPage.cshtml" />
+	  <AdditionalFiles Remove="Views\Home.cshtml" />
+	  <AdditionalFiles Remove="Views\People.cshtml" />
+	  <AdditionalFiles Remove="Views\Person.cshtml" />
+	  <AdditionalFiles Remove="Views\Product.cshtml" />
+	  <AdditionalFiles Remove="Views\Products.cshtml" />
+	  <AdditionalFiles Remove="Views\_Master.cshtml" />
+	  <AdditionalFiles Remove="Views\_ViewImports.cshtml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Remove="Themes\BlueBubbles\Views\Home.cshtml" />
+	  <Content Remove="Themes\BlueBubbles\Views\Products.cshtml" />
+	  <Content Remove="Themes\BlueBubbles\_Master.cshtml" />
+	  <Content Remove="Themes\BlueBubbles\_ViewImports.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\Blog.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\Blogpost.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\Contact.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\ContentPage.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\Home.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\People.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\Person.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\Product.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\Products.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\_Master.cshtml" />
+	  <Content Remove="Themes\DefaultStarterKit\Views\_ViewImports.cshtml" />
+	</ItemGroup>
 
 
 	<ItemGroup>
 		
 		<PackageReference Include="Umbraco.Cms" Version="17.4.2" />
+		
+		<PackageReference Include="Umbraco.TheStarterKit" Version="17.0.0" />
 
 		<PackageReference Include="uSync" Version="17.3.2" />
 
@@ -24,6 +61,56 @@
 		<PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
 		<RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
 
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Content Update="Themes\BlueBubbles\Views\Partials\_Footer.cshtml">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Update="Themes\BlueBubbles\Views\Partials\_Header.cshtml">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Update="Themes\BlueBubbles\Views\Partials\_Nav_Main.cshtml">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Update="Themes\BlueBubbles\Views\Web.config">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Update="Themes\BlueBubbles\Views\_Master.cshtml">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Update="Themes\BlueBubbles\Views\_ViewImports.cshtml">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Update="wwwroot\Themes\BlueBubbles\Assets\README.txt">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Update="wwwroot\Themes\BlueBubbles\Configs\README.txt">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Update="wwwroot\Themes\BlueBubbles\Theme.config">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Update="wwwroot\Themes\~CssOverrides\purple.css">
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\Assets\" />
+	  <Folder Include="wwwroot\Themes\~DefaultConfigs\" />
 	</ItemGroup>
 
 

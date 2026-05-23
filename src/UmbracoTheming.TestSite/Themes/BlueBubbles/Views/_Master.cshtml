@@ -1,0 +1,65 @@
+@inherits UmbracoViewPage<IPublishedContent>
+@{
+	Layout = null;
+
+	var currentPage = Model;
+	var thisTheme = currentPage.Value<string>("Theme", fallback: Fallback.ToAncestors);
+	var templateFilePath = ThemeHelper.GetThemeViewPath(thisTheme, currentPage.GetTemplateAlias());
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- General Meta tags -->
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+	<title>MetaTitle</title>
+	<meta name="description" content="MetaDescription">
+
+	<link rel="shortcut icon" href="@Url.ThemedAsset(ThemeHelper, thisTheme, "images/favicon.ico")">
+
+	<!-- Site-wide CSS -->
+	<!-- Example of single themed file -->
+	<link rel="stylesheet" href="@Url.ThemedAsset(ThemeHelper, thisTheme, "css/custom.css")" />
+
+	
+	<!-- Site-wide HEAD Js -->
+	<!-- Example of single themed file -->
+	<script src="@Url.ThemedAsset(ThemeHelper,thisTheme, "js/myscript.js")"></script>
+
+	@RenderSection("HeadScripts", required: false)
+
+</head>
+
+<body class="BodyCss">
+	<!-- PageType: @currentPage.ContentType.Alias -->
+	@if (templateFilePath.StartsWith("~/Views"))
+	{
+		var themeFolder = ThemeHelper.GetThemePath(thisTheme) + "Views/";
+		var templateName = templateFilePath.Replace("~/Views/", "");
+		<!--Customize by creating a Template file named '@templateName' at '@themeFolder'-->
+	}
+	else
+	{
+		<!--Customize this Template at '@templateFilePath'-->
+	}
+
+
+	<div class="page">
+		<div class="wrap">
+			@Html.ThemedPartial(ThemeHelper, thisTheme, "_Header", Model)
+
+			@RenderBody() @*CHILD TEMPLATE BODY HERE*@
+
+		</div>
+
+	@Html.ThemedPartial(ThemeHelper,thisTheme, "_Footer", Model)
+		
+	</div>
+
+	
+	@RenderSection("FooterScripts", required: false)
+</body>
+</html>

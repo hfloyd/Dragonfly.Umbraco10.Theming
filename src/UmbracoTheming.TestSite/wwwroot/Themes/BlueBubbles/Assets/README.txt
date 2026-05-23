@@ -1,0 +1,1 @@
+This folder holds the assets for the Theme - like images, JS/CSS, etc.
