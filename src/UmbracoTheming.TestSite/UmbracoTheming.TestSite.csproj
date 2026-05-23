@@ -14,9 +14,9 @@
 
 	<ItemGroup>
 		
-		<PackageReference Include="Umbraco.Cms" Version="17.0.0" />
+		<PackageReference Include="Umbraco.Cms" Version="17.4.2" />
 
-		<PackageReference Include="uSync" Version="17.0.0" />
+		<PackageReference Include="uSync" Version="17.3.2" />
 
 		<ProjectReference Include="..\Theming.Web\Dragonfly.UmbracoTheming.Web.csproj" />
 
