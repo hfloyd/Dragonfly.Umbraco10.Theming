@@ -1,4 +1,7 @@
-﻿@{
-	Layout = "_Master.cshtml";
+@{
+	var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+	var masterView = ThemeHelper.GetThemeViewPath(thisTheme, "_Master");
+
+	Layout = masterView;
 }
 <p>Nothing to see, but we could make a lesson to display a person</p>

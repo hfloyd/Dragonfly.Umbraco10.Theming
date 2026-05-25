@@ -1,13 +1,34 @@
+@using Umbraco.Cms.Web.Common.PublishedModels
 @inherits UmbracoViewPage<IPublishedContent>
 @{
-	var currentPage = Model;
-	var thisTheme = "MyTheme";
+    var root = Model.Root();
+    var home = root as Home;
+    var siteName = home?.Sitename ?? root?.Name ?? "";
+    var siteLogo = home?.SiteLogo;
 }
+<header class="header">
 
-<!--PV:_Header-->
-<header>
-	<a href="Site.Url" class="logo pull-left">Home</a>
-	@* @Html.ThemedPartial(ThemeHelper, thisTheme, "_Nav_Main", Model) *@
+    <div class="logo">
+        @if (siteLogo != null && !string.IsNullOrEmpty(siteLogo.Url()))
+        {
+            <a href="/" class="nav-link--home">
+                <img class="logo-image" src="@siteLogo.Url()" alt="@siteName" />
+            </a>
+        }
+        else
+        {
+            <a class="nav-link nav-link--home nav-link--home__text logo-text" href="/">@siteName</a>
+        }
+    </div>
+
+    <nav class="nav-bar top-nav">
+        <partial name="Partials/Navigation/TopNavigation" />
+    </nav>
+
+    <div class="mobile-nav-handler">
+        <div class="hamburger lines" id="toggle-nav">
+            <span></span>
+        </div>
+    </div>
+
 </header>
-
-<p><b>NOTE:</b> All Site Design Templates should be created in the appropriate '/Themes/' folder.</p>

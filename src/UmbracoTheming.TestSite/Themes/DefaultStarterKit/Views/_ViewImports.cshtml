@@ -1,6 +1,20 @@
-@using Umbraco.Extensions
-@using Umbraco.Cms.Web.Common.PublishedModels
-@using Umbraco.Cms.Web.Common.Views
-@using Umbraco.Cms.Core.Models.PublishedContent
-@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Html;
+@*@using Microsoft.AspNetCore.Http*@
+@using Microsoft.Extensions.Logging;
+
+@using Umbraco.Cms.Core.Models;
+@using Umbraco.Extensions;
+@using Umbraco.Cms.Web.Common
+@using Umbraco.Cms.Web.Common.Views;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.PublishedContent;
+
+@using Dragonfly.UmbracoTheming;
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@inject ILogger<UmbracoViewPage> CurrentLogger
+@*@inject Microsoft.AspNetCore.Mvc.Routing.UrlHelper UrlHelper
+@inject Microsoft.AspNetCore.Http.HttpRequest Request*@
+
+@inject ThemeHelperService ThemeHelper

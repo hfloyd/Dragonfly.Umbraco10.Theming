@@ -1,7 +1,10 @@
-﻿@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Blog>
 @{
-    Layout = "_Master.cshtml";
+	var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+	var masterView = ThemeHelper.GetThemeViewPath(thisTheme, "_Master");
+
+	Layout = masterView;
 }
 
 <partial name="Partials/SectionHeader"/>

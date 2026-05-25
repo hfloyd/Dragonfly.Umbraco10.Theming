@@ -1,6 +1,10 @@
-﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Product>
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Product>
 @{
-    Layout = "_Master.cshtml";
+	var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+	var masterView = ThemeHelper.GetThemeViewPath(thisTheme, "_Master");
+
+	Layout = masterView;
+
     var defaultCurrency = Model.Parent<Products>().DefaultCurrency;
 }
 <!-- for the section we want to show the shop header -->

@@ -1,6 +1,9 @@
-﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<People>
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<People>
 @{
-    Layout = "_Master.cshtml";
+	var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+	var masterView = ThemeHelper.GetThemeViewPath(thisTheme, "_Master");
+
+	Layout = masterView;
 }
 @{
     void SocialLink(string content, string service)

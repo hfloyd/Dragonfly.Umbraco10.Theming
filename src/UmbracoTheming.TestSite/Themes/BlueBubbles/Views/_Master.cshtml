@@ -1,65 +1,57 @@
 @inherits UmbracoViewPage<IPublishedContent>
 @{
-	Layout = null;
-
-	var currentPage = Model;
-	var thisTheme = currentPage.Value<string>("Theme", fallback: Fallback.ToAncestors);
-	var templateFilePath = ThemeHelper.GetThemeViewPath(thisTheme, currentPage.GetTemplateAlias());
-
+    Layout = null;
+    var currentPage = Model;
+   // var thisTheme = currentPage.Value<string>("siteTheme", fallback: Fallback.ToAncestors);
+    var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+    var templateFilePath = ThemeHelper.GetThemeViewPath(thisTheme, currentPage.GetTemplateAlias());
 }
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<!-- General Meta tags -->
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title>@currentPage.Name</title>
+    <meta name="description" content="">
 
-	<title>MetaTitle</title>
-	<meta name="description" content="MetaDescription">
+    @* StarterKit base CSS — keeps the shared nav partial working *@
+    <link rel="stylesheet" href="@Url.Content("~/css/umbraco-starterkit-style.css")" />
 
-	<link rel="shortcut icon" href="@Url.ThemedAsset(ThemeHelper, thisTheme, "images/favicon.ico")">
+    @* BlueBubbles theme CSS *@
+    <link rel="stylesheet" href="@Url.ThemedAsset(ThemeHelper, thisTheme, "css/blue-bubbles.css")" />
 
-	<!-- Site-wide CSS -->
-	<!-- Example of single themed file -->
-	<link rel="stylesheet" href="@Url.ThemedAsset(ThemeHelper, thisTheme, "css/custom.css")" />
-
-	
-	<!-- Site-wide HEAD Js -->
-	<!-- Example of single themed file -->
-	<script src="@Url.ThemedAsset(ThemeHelper,thisTheme, "js/myscript.js")"></script>
-
-	@RenderSection("HeadScripts", required: false)
-
+    @await RenderSectionAsync("HeadScripts", required: false)
 </head>
+<body class="bb-theme">
 
-<body class="BodyCss">
-	<!-- PageType: @currentPage.ContentType.Alias -->
-	@if (templateFilePath.StartsWith("~/Views"))
-	{
-		var themeFolder = ThemeHelper.GetThemePath(thisTheme) + "Views/";
-		var templateName = templateFilePath.Replace("~/Views/", "");
-		<!--Customize by creating a Template file named '@templateName' at '@themeFolder'-->
-	}
-	else
-	{
-		<!--Customize this Template at '@templateFilePath'-->
-	}
+    @* Ambient floating bubble shapes *@
+    <div class="bb-ambient" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
+    @* Mobile nav overlay (used by starterkit-app.js) *@
+    <div class="mobile-nav">
+        <nav class="nav-bar">
+            <partial name="Partials/Navigation/TopNavigation" />
+        </nav>
+    </div>
 
-	<div class="page">
-		<div class="wrap">
-			@Html.ThemedPartial(ThemeHelper, thisTheme, "_Header", Model)
+    @Html.ThemedPartial(ThemeHelper, thisTheme, "_Header", Model)
 
-			@RenderBody() @*CHILD TEMPLATE BODY HERE*@
+    <main>
+        @RenderBody()
+    </main>
 
-		</div>
+    @Html.ThemedPartial(ThemeHelper, thisTheme, "_Footer", Model)
 
-	@Html.ThemedPartial(ThemeHelper,thisTheme, "_Footer", Model)
-		
-	</div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+    <script src="@Url.Content("~/scripts/umbraco-starterkit-app.js")"></script>
 
-	
-	@RenderSection("FooterScripts", required: false)
+    @await RenderSectionAsync("FooterScripts", required: false)
 </body>
 </html>

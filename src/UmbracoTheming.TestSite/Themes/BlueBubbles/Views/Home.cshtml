@@ -1,55 +1,54 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Home>
 @{
     Layout = "_Master.cshtml";
-    var backgroundImage = Model.HeroBackgroundImage != null ? Model.HeroBackgroundImage.Url() : String.Empty;
+    var backgroundImage = Model.HeroBackgroundImage?.Url() ?? string.Empty;
 }
-<section class="section section--full-height background-image-full overlay overlay--dark section--content-center section--thick-border"
-         style="background-image: url('@backgroundImage')">
-    <div class="section__hero-content">
+
+@* ── Hero ─────────────────────────────────────── *@
+<section class="bb-hero">
+    @if (!string.IsNullOrEmpty(backgroundImage))
+    {
+        <div class="bb-hero__bg" style="background-image: url('@backgroundImage')"></div>
+    }
+    <div aria-hidden="true">
+        <div class="bb-hero__bubble bb-hero__bubble--1"></div>
+        <div class="bb-hero__bubble bb-hero__bubble--2"></div>
+        <div class="bb-hero__bubble bb-hero__bubble--3"></div>
+        <div class="bb-hero__bubble bb-hero__bubble--4"></div>
+    </div>
+    <div class="bb-hero__content">
         <h1>@Model.HeroHeader</h1>
-        <p class="section__description">@Model.HeroDescription</p>@{
-        var heroCtalink = Model.HeroCtalink;
-        if (heroCtalink != null)
+        <p class="bb-hero__description">@Model.HeroDescription</p>
+        @if (Model.HeroCtalink != null)
         {
-            <a class="button button--border--solid" href="@heroCtalink.Url()">
+            <a class="bb-btn bb-btn--primary" href="@Model.HeroCtalink.Url()">
                 @Model.HeroCtacaption
             </a>
         }
-    }
-    @if (Model.HeroCtalink != null)
-    {
-        <a class="button button--border--solid" href="@Model.HeroCtalink.Url()">
-            @Model.HeroCtacaption
-        </a>
-    }
-</div>
+    </div>
 </section>
 
-<section class="section section">
-    @await Html.GetBlockGridHtmlAsync(Model.BodyText)
-</section>
-
-<section class="section section--themed">
-
-    <div class="container">
-        <div class="row">
-
-            <div class="ta-center">
-                <h2>@Model.FooterHeader</h2>
-                <p class="section__description mw-640 ma-h-auto">@Model.FooterDescription</p>
-
-                @{
-                    var footerCtalink = Model.FooterCtalink;
-                    if (footerCtalink != null)
-                    {
-                        <a class="button button--border--light_solid" href="@footerCtalink.Url()">
-                            @Model.FooterCtacaption
-                        </a>
-                    }
-                }
-            </div>
-
+@* ── Body content ─────────────────────────────── *@
+<section class="bb-section bb-section--light">
+    <div class="bb-section__inner">
+        <div class="bb-content-card">
+            @await Html.GetBlockGridHtmlAsync(Model.BodyText)
         </div>
     </div>
+</section>
 
+@* ── Footer CTA ───────────────────────────────── *@
+<section class="bb-section bb-section--blue">
+    <div class="bb-section__inner">
+        <div class="bb-section__header">
+            <h2 class="bb-section__title">@Model.FooterHeader</h2>
+            <p class="bb-section__description">@Model.FooterDescription</p>
+            @if (Model.FooterCtalink != null)
+            {
+                <a class="bb-btn bb-btn--light" href="@Model.FooterCtalink.Url()">
+                    @Model.FooterCtacaption
+                </a>
+            }
+        </div>
+    </div>
 </section>

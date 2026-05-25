@@ -1,14 +1,12 @@
+@using Umbraco.Cms.Web.Common.PublishedModels
 @inherits UmbracoViewPage<IPublishedContent>
 @{
-	var currentPage = Model;
-	var thisTheme = "MyTheme";
-
+    var root = Model.Root();
+    var home = root as Home;
+    var footerAddress = home?.FooterAddress;
 }
-
-<!--PV:_Footer-->
-<footer>
-	<div class="container">
-		<h2>FOOTER HERE</h2>
-		@*@Html.ThemedPartial(ThemeHelper,thisTheme, "Nav_Footer", Model)*@
-	</div>
+<footer class="bb-footer">
+    <div class="container">
+        @footerAddress
+    </div>
 </footer>
