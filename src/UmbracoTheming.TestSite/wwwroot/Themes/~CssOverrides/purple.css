@@ -1,2 +1,32 @@
-﻿body {
+
+
+
+/* --- Variables --------------------------------- */
+:root {
+	--bb-navy: #12072a;
+	--bb-dark: #2e1065;
+	--bb-blue: #6d28d9;
+	--bb-blue-mid: #8b5cf6;
+	--bb-sky: #c78bfa;
+	--bb-light: #f5f3ff;
+	--bb-border: #ddd6fe;
+	--bb-text: #1e1b2e;
+	--bb-muted: #6d6082;
+	--bb-white: #ffffff;
+	--bb-radius: 1rem;
+	--bb-radius-lg: 2rem;
+	--bb-shadow: 0 4px 24px rgba(30, 80, 208, 0.10);
+	--bb-shadow-lg: 0 10px 40px rgba(30, 80, 208, 0.18);
+}
+
+.bb-theme .header {
+	background: linear-gradient(130deg, #6b2fed 0%, #c288f7 100%);
+}
+
+.bb-hero {
+	background: linear-gradient(140deg, var(--bb-navy) 0%, #6a1570 45%, #d81da6 100%);
+}
+
+.bb-section--blue {
+	background: linear-gradient(135deg, #7508b0 0%, #573d61 100%);
 }

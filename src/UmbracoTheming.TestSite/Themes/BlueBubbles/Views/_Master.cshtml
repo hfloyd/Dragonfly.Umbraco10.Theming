@@ -1,10 +1,12 @@
 @inherits UmbracoViewPage<IPublishedContent>
 @{
-    Layout = null;
-    var currentPage = Model;
-   // var thisTheme = currentPage.Value<string>("siteTheme", fallback: Fallback.ToAncestors);
-    var thisTheme = ThemeHelper.GetSiteThemeName(Model);
-    var templateFilePath = ThemeHelper.GetThemeViewPath(thisTheme, currentPage.GetTemplateAlias());
+	Layout = null;
+	var currentPage = Model;
+	// var thisTheme = currentPage.Value<string>("siteTheme", fallback: Fallback.ToAncestors);
+	var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+	var templateFilePath = ThemeHelper.GetThemeViewPath(thisTheme, currentPage.GetTemplateAlias());
+
+	var siteCssOverrideFilename = currentPage.Value<string>("siteCssFile", fallback: Fallback.ToAncestors);
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +22,12 @@
 
     @* BlueBubbles theme CSS *@
     <link rel="stylesheet" href="@Url.ThemedAsset(ThemeHelper, thisTheme, "css/blue-bubbles.css")" />
+	
+    @*Testing CSS Override*@
+    @if(!string.IsNullOrEmpty(siteCssOverrideFilename))
+    {
+        <link rel="stylesheet" href="@Url.GetCssOverridePath(ThemeHelper, siteCssOverrideFilename)" />
+    }
 
     @await RenderSectionAsync("HeadScripts", required: false)
 </head>

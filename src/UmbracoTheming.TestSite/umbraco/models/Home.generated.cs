@@ -154,6 +154,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string HeroHeader => this.Value<string>(_publishedValueFallback, "heroHeader");
 
 		///<summary>
+		/// SiteCssFile: Dragonfly Theming CSS Override File
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("siteCssFile")]
+		public virtual string SiteCssFile => this.Value<string>(_publishedValueFallback, "siteCssFile");
+
+		///<summary>
 		/// Logo: Optional. If you add a logo it'll be used in the upper left corner instead of the site name. Make sure to use a transparent logo for best results
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.4.2+b87d519")]
