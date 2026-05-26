@@ -31,7 +31,7 @@ export class DragonflyThemePickerElement
     }
 
     async #loadThemes() {
-        const { data, error } = await DragonflyUmbracoThemingService.getUmbracoDragonflythemingApiV1Themes();
+        const { data, error } = await DragonflyUmbracoThemingService.getThemes();
 
         if (error) {
             console.error('ThemePicker: failed to load themes', error);

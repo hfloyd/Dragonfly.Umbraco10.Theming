@@ -173,140 +173,140 @@ export type UserModelWritable = {
     kind: UserKindModel;
 };
 
-export type GetUmbracoDragonflythemingApiV1CssOverridesData = {
+export type GetCssOverridesData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/umbraco/dragonflytheming/api/v1/css-overrides';
 };
 
-export type GetUmbracoDragonflythemingApiV1CssOverridesErrors = {
+export type GetCssOverridesErrors = {
     /**
      * The resource is protected and requires an authentication token
      */
     401: unknown;
 };
 
-export type GetUmbracoDragonflythemingApiV1CssOverridesResponses = {
+export type GetCssOverridesResponses = {
     /**
      * OK
      */
     200: Array<string>;
 };
 
-export type GetUmbracoDragonflythemingApiV1CssOverridesResponse = GetUmbracoDragonflythemingApiV1CssOverridesResponses[keyof GetUmbracoDragonflythemingApiV1CssOverridesResponses];
+export type GetCssOverridesResponse = GetCssOverridesResponses[keyof GetCssOverridesResponses];
 
-export type GetUmbracoDragonflythemingApiV1PingData = {
+export type PingData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/umbraco/dragonflytheming/api/v1/ping';
 };
 
-export type GetUmbracoDragonflythemingApiV1PingErrors = {
+export type PingErrors = {
     /**
      * The resource is protected and requires an authentication token
      */
     401: unknown;
 };
 
-export type GetUmbracoDragonflythemingApiV1PingResponses = {
+export type PingResponses = {
     /**
      * OK
      */
     200: string;
 };
 
-export type GetUmbracoDragonflythemingApiV1PingResponse = GetUmbracoDragonflythemingApiV1PingResponses[keyof GetUmbracoDragonflythemingApiV1PingResponses];
+export type PingResponse = PingResponses[keyof PingResponses];
 
-export type GetUmbracoDragonflythemingApiV1ThemesData = {
+export type GetThemesData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/umbraco/dragonflytheming/api/v1/themes';
 };
 
-export type GetUmbracoDragonflythemingApiV1ThemesErrors = {
+export type GetThemesErrors = {
     /**
      * The resource is protected and requires an authentication token
      */
     401: unknown;
 };
 
-export type GetUmbracoDragonflythemingApiV1ThemesResponses = {
+export type GetThemesResponses = {
     /**
      * OK
      */
     200: Array<string>;
 };
 
-export type GetUmbracoDragonflythemingApiV1ThemesResponse = GetUmbracoDragonflythemingApiV1ThemesResponses[keyof GetUmbracoDragonflythemingApiV1ThemesResponses];
+export type GetThemesResponse = GetThemesResponses[keyof GetThemesResponses];
 
-export type GetUmbracoDragonflythemingApiV1WhatsMyNameData = {
+export type WhatsMyNameData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/umbraco/dragonflytheming/api/v1/whatsMyName';
 };
 
-export type GetUmbracoDragonflythemingApiV1WhatsMyNameErrors = {
+export type WhatsMyNameErrors = {
     /**
      * The resource is protected and requires an authentication token
      */
     401: unknown;
 };
 
-export type GetUmbracoDragonflythemingApiV1WhatsMyNameResponses = {
+export type WhatsMyNameResponses = {
     /**
      * OK
      */
     200: string;
 };
 
-export type GetUmbracoDragonflythemingApiV1WhatsMyNameResponse = GetUmbracoDragonflythemingApiV1WhatsMyNameResponses[keyof GetUmbracoDragonflythemingApiV1WhatsMyNameResponses];
+export type WhatsMyNameResponse = WhatsMyNameResponses[keyof WhatsMyNameResponses];
 
-export type GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfData = {
+export type WhatsTheTimeMrWolfData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/umbraco/dragonflytheming/api/v1/whatsTheTimeMrWolf';
 };
 
-export type GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfErrors = {
+export type WhatsTheTimeMrWolfErrors = {
     /**
      * The resource is protected and requires an authentication token
      */
     401: unknown;
 };
 
-export type GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfResponses = {
+export type WhatsTheTimeMrWolfResponses = {
     /**
      * OK
      */
     200: string;
 };
 
-export type GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfResponse = GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfResponses[keyof GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfResponses];
+export type WhatsTheTimeMrWolfResponse = WhatsTheTimeMrWolfResponses[keyof WhatsTheTimeMrWolfResponses];
 
-export type GetUmbracoDragonflythemingApiV1WhoAmIData = {
+export type WhoAmIData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/umbraco/dragonflytheming/api/v1/whoAmI';
 };
 
-export type GetUmbracoDragonflythemingApiV1WhoAmIErrors = {
+export type WhoAmIErrors = {
     /**
      * The resource is protected and requires an authentication token
      */
     401: unknown;
 };
 
-export type GetUmbracoDragonflythemingApiV1WhoAmIResponses = {
+export type WhoAmIResponses = {
     /**
      * OK
      */
     200: UserModel;
 };
 
-export type GetUmbracoDragonflythemingApiV1WhoAmIResponse = GetUmbracoDragonflythemingApiV1WhoAmIResponses[keyof GetUmbracoDragonflythemingApiV1WhoAmIResponses];
+export type WhoAmIResponse = WhoAmIResponses[keyof WhoAmIResponses];

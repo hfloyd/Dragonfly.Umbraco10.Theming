@@ -42,7 +42,7 @@
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Core</AssemblyName>
 		<!-- REMINDER: When updating the MAJOR version, also update '\src\Directory.Packages.props' -->
-		<Version>17.0.0</Version>
+		<Version>17.1.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>

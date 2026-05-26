@@ -31,7 +31,7 @@ export class DragonflyCssOverridePickerElement
     }
 
     async #loadFiles() {
-        const { data, error } = await DragonflyUmbracoThemingService.getUmbracoDragonflythemingApiV1CssOverrides();
+        const { data, error } = await DragonflyUmbracoThemingService.getCssOverrides();
 
         if (error) {
             console.error('CssOverridePicker: failed to load CSS overrides', error);

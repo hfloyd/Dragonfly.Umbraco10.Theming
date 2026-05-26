@@ -64,7 +64,7 @@ namespace Dragonfly.UmbracoTheming.Composers
 
             protected override bool CanHandle(ApiDescription apiDescription, ControllerActionDescriptor controllerActionDescriptor)
             {
-                return controllerActionDescriptor.ControllerTypeInfo.Namespace?.StartsWith("DragonflyUmbracoTheming.Controllers", comparisonType: StringComparison.InvariantCultureIgnoreCase) is true;
+                return controllerActionDescriptor.ControllerTypeInfo.Namespace?.StartsWith("Dragonfly.UmbracoTheming.Controllers", comparisonType: StringComparison.InvariantCultureIgnoreCase) is true;
             }
 
             public override string Handle(ApiDescription apiDescription) => $"{apiDescription.ActionDescriptor.RouteValues["action"]}";

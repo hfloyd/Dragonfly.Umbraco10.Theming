@@ -52,7 +52,7 @@ export class ExampleDashboardElement extends UmbElementMixin(LitElement) {
     const buttonElement = ev.target as UUIButtonElement;
     buttonElement.state = "waiting";
 
-    const { data, error } = await DragonflyUmbracoThemingService.getUmbracoDragonflythemingApiV1WhoAmI();
+    const { data, error } = await DragonflyUmbracoThemingService.whoAmI();
 
     if (error) {
       buttonElement.state = "failed";
@@ -80,7 +80,7 @@ export class ExampleDashboardElement extends UmbElementMixin(LitElement) {
     buttonElement.state = "waiting";
 
     // Getting a string - should I expect a datetime?!
-    const { data, error } = await DragonflyUmbracoThemingService.getUmbracoDragonflythemingApiV1WhatsTheTimeMrWolf();
+    const { data, error } = await DragonflyUmbracoThemingService.whatsTheTimeMrWolf();
 
     if (error) {
       buttonElement.state = "failed";
@@ -98,7 +98,7 @@ export class ExampleDashboardElement extends UmbElementMixin(LitElement) {
     const buttonElement = ev.target as UUIButtonElement;
     buttonElement.state = "waiting";
 
-    const { data, error } = await DragonflyUmbracoThemingService.getUmbracoDragonflythemingApiV1WhatsMyName();
+    const { data, error } = await DragonflyUmbracoThemingService.whatsMyName();
 
     if (error) {
       buttonElement.state = "failed";
