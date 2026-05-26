@@ -29,19 +29,19 @@ Install the correct package/version for your Umbraco installation.
 
 Credit goes to [Shannon Deminick's *Articulate* package](https://github.com/Shazwazza/Articulate) for inspiration and initial code.
 
-**NOTE:** This project was ported from the [v8 version](https://github.com/hfloyd/Dragonfly.Umbraco8Theming). Please [report any issues](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming/issues) you experience.
+Please [report any issues](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming/issues) you experience.
 
 ## Installation
 
 Generally, you will want to install the .Web version of the package into your Umbraco project, which includes the App_Plugins, a setup of the Themes folders, and example Razor files:
 
-[![Nuget Downloads](https://buildstats.info/nuget/Dragonfly.Umbraco10.Theming.Web)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Web/)
+[![Nuget Downloads](http://buildstats.info/nuget/Dragonfly.Umbraco10.Theming.Web)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Web/)
 
      PM>   Install-Package Dragonfly.Umbraco10.Theming.Web
 
 There is also a .Core version available which only includes the DLL files. This can be used if you have an accompanying Class project which needs to access the ThemeHelperService:
 
-[![Nuget Downloads](https://buildstats.info/nuget/Dragonfly.Umbraco10.Theming.Core)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Core/)
+[![Nuget Downloads](http://buildstats.info/nuget/Dragonfly.Umbraco10.Theming.Core)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Core/)
 
      PM>   Install-Package Dragonfly.Umbraco10.Theming.Core
 
@@ -49,7 +49,7 @@ There is also a .Core version available which only includes the DLL files. This 
 
 GitHub Repository: [https://github.com/hfloyd/Dragonfly.Umbraco10.Theming](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming)
 
-- [Dragonfly Theming for Umbraco 10](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming) 
+- [Dragonfly Theming for Umbraco 10+](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming) 
 - [Dragonfly Theming for Umbraco 8](https://github.com/hfloyd/Dragonfly.Umbraco8Theming) 
 - [Dragonfly Theming for Umbraco 7](https://github.com/hfloyd/Dragonfly.UmbracoTheming)
 
