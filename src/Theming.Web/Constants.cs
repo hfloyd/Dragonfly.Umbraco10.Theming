@@ -1,4 +1,4 @@
-namespace DragonflyUmbracoTheming
+namespace Dragonfly.UmbracoTheming
 {
     public class Constants
     {

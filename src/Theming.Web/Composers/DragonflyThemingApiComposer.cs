@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using DragonflyUmbracoTheming;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Options;

@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { PingData, PingErrors, PingResponses, WhatsMyNameData, WhatsMyNameErrors, WhatsMyNameResponses, WhatsTheTimeMrWolfData, WhatsTheTimeMrWolfErrors, WhatsTheTimeMrWolfResponses, WhoAmIData, WhoAmIErrors, WhoAmIResponses } from './types.gen';
+import type { GetUmbracoDragonflythemingApiV1CssOverridesData, GetUmbracoDragonflythemingApiV1CssOverridesErrors, GetUmbracoDragonflythemingApiV1CssOverridesResponses, GetUmbracoDragonflythemingApiV1PingData, GetUmbracoDragonflythemingApiV1PingErrors, GetUmbracoDragonflythemingApiV1PingResponses, GetUmbracoDragonflythemingApiV1ThemesData, GetUmbracoDragonflythemingApiV1ThemesErrors, GetUmbracoDragonflythemingApiV1ThemesResponses, GetUmbracoDragonflythemingApiV1WhatsMyNameData, GetUmbracoDragonflythemingApiV1WhatsMyNameErrors, GetUmbracoDragonflythemingApiV1WhatsMyNameResponses, GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfData, GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfErrors, GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfResponses, GetUmbracoDragonflythemingApiV1WhoAmIData, GetUmbracoDragonflythemingApiV1WhoAmIErrors, GetUmbracoDragonflythemingApiV1WhoAmIResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -18,9 +18,22 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
     meta?: Record<string, unknown>;
 };
 
-export class ThemingService {
-    public static ping<ThrowOnError extends boolean = false>(options?: Options<PingData, ThrowOnError>) {
-        return (options?.client ?? client).get<PingResponses, PingErrors, ThrowOnError>({
+export class DragonflyUmbracoThemingService {
+    public static getUmbracoDragonflythemingApiV1CssOverrides<ThrowOnError extends boolean = false>(options?: Options<GetUmbracoDragonflythemingApiV1CssOverridesData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetUmbracoDragonflythemingApiV1CssOverridesResponses, GetUmbracoDragonflythemingApiV1CssOverridesErrors, ThrowOnError>({
+            security: [
+                {
+                    scheme: 'bearer',
+                    type: 'http'
+                }
+            ],
+            url: '/umbraco/dragonflytheming/api/v1/css-overrides',
+            ...options
+        });
+    }
+    
+    public static getUmbracoDragonflythemingApiV1Ping<ThrowOnError extends boolean = false>(options?: Options<GetUmbracoDragonflythemingApiV1PingData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetUmbracoDragonflythemingApiV1PingResponses, GetUmbracoDragonflythemingApiV1PingErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -32,8 +45,21 @@ export class ThemingService {
         });
     }
     
-    public static whatsMyName<ThrowOnError extends boolean = false>(options?: Options<WhatsMyNameData, ThrowOnError>) {
-        return (options?.client ?? client).get<WhatsMyNameResponses, WhatsMyNameErrors, ThrowOnError>({
+    public static getUmbracoDragonflythemingApiV1Themes<ThrowOnError extends boolean = false>(options?: Options<GetUmbracoDragonflythemingApiV1ThemesData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetUmbracoDragonflythemingApiV1ThemesResponses, GetUmbracoDragonflythemingApiV1ThemesErrors, ThrowOnError>({
+            security: [
+                {
+                    scheme: 'bearer',
+                    type: 'http'
+                }
+            ],
+            url: '/umbraco/dragonflytheming/api/v1/themes',
+            ...options
+        });
+    }
+    
+    public static getUmbracoDragonflythemingApiV1WhatsMyName<ThrowOnError extends boolean = false>(options?: Options<GetUmbracoDragonflythemingApiV1WhatsMyNameData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetUmbracoDragonflythemingApiV1WhatsMyNameResponses, GetUmbracoDragonflythemingApiV1WhatsMyNameErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -45,8 +71,8 @@ export class ThemingService {
         });
     }
     
-    public static whatsTheTimeMrWolf<ThrowOnError extends boolean = false>(options?: Options<WhatsTheTimeMrWolfData, ThrowOnError>) {
-        return (options?.client ?? client).get<WhatsTheTimeMrWolfResponses, WhatsTheTimeMrWolfErrors, ThrowOnError>({
+    public static getUmbracoDragonflythemingApiV1WhatsTheTimeMrWolf<ThrowOnError extends boolean = false>(options?: Options<GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfResponses, GetUmbracoDragonflythemingApiV1WhatsTheTimeMrWolfErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',
@@ -58,8 +84,8 @@ export class ThemingService {
         });
     }
     
-    public static whoAmI<ThrowOnError extends boolean = false>(options?: Options<WhoAmIData, ThrowOnError>) {
-        return (options?.client ?? client).get<WhoAmIResponses, WhoAmIErrors, ThrowOnError>({
+    public static getUmbracoDragonflythemingApiV1WhoAmI<ThrowOnError extends boolean = false>(options?: Options<GetUmbracoDragonflythemingApiV1WhoAmIData, ThrowOnError>) {
+        return (options?.client ?? client).get<GetUmbracoDragonflythemingApiV1WhoAmIResponses, GetUmbracoDragonflythemingApiV1WhoAmIErrors, ThrowOnError>({
             security: [
                 {
                     scheme: 'bearer',

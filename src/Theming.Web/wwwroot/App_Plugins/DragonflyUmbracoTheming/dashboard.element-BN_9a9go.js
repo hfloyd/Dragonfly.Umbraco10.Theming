@@ -1,102 +1,52 @@
-import { LitElement as w, html as y, css as x, state as c, customElement as T } from "@umbraco-cms/backoffice/external/lit";
+import { LitElement as b, html as v, css as x, state as h, customElement as U } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin as W } from "@umbraco-cms/backoffice/element-api";
 import { UMB_NOTIFICATION_CONTEXT as C } from "@umbraco-cms/backoffice/notification";
-import { UMB_CURRENT_USER_CONTEXT as M } from "@umbraco-cms/backoffice/current-user";
-import { c as l } from "./client.gen-Brb7QXZt.js";
-class d {
-  static ping(e) {
-    return (e?.client ?? l).get({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
-      url: "/umbraco/dragonflytheming/api/v1/ping",
-      ...e
-    });
-  }
-  static whatsMyName(e) {
-    return (e?.client ?? l).get({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
-      url: "/umbraco/dragonflytheming/api/v1/whatsMyName",
-      ...e
-    });
-  }
-  static whatsTheTimeMrWolf(e) {
-    return (e?.client ?? l).get({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
-      url: "/umbraco/dragonflytheming/api/v1/whatsTheTimeMrWolf",
-      ...e
-    });
-  }
-  static whoAmI(e) {
-    return (e?.client ?? l).get({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
-      url: "/umbraco/dragonflytheming/api/v1/whoAmI",
-      ...e
-    });
-  }
-}
-var U = Object.defineProperty, E = Object.getOwnPropertyDescriptor, g = (t) => {
+import { UMB_CURRENT_USER_CONTEXT as w } from "@umbraco-cms/backoffice/current-user";
+import { D as p } from "./sdk.gen-__6zMVnj.js";
+var T = Object.defineProperty, E = Object.getOwnPropertyDescriptor, y = (t) => {
   throw TypeError(t);
 }, u = (t, e, r, a) => {
-  for (var s = a > 1 ? void 0 : a ? E(e, r) : e, m = t.length - 1, p; m >= 0; m--)
-    (p = t[m]) && (s = (a ? p(e, r, s) : p(s)) || s);
-  return a && s && U(e, r, s), s;
-}, b = (t, e, r) => e.has(t) || g("Cannot " + r), o = (t, e, r) => (b(t, e, "read from private field"), r ? r.call(t) : e.get(t)), h = (t, e, r) => e.has(t) ? g("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, r), N = (t, e, r, a) => (b(t, e, "write to private field"), e.set(t, r), r), n, f, v, _;
-let i = class extends W(w) {
+  for (var i = a > 1 ? void 0 : a ? E(e, r) : e, c = t.length - 1, m; c >= 0; c--)
+    (m = t[c]) && (i = (a ? m(e, r, i) : m(i)) || i);
+  return a && i && T(e, r, i), i;
+}, g = (t, e, r) => e.has(t) || y("Cannot " + r), s = (t, e, r) => (g(t, e, "read from private field"), r ? r.call(t) : e.get(t)), l = (t, e, r) => e.has(t) ? y("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, r), D = (t, e, r, a) => (g(t, e, "write to private field"), e.set(t, r), r), n, d, f, _;
+let o = class extends W(b) {
   constructor() {
-    super(), this._yourName = "Press the button!", h(this, n), h(this, f, async (t) => {
+    super(), this._yourName = "Press the button!", l(this, n), l(this, d, async (t) => {
       const e = t.target;
       e.state = "waiting";
-      const { data: r, error: a } = await d.whoAmI();
+      const { data: r, error: a } = await p.getUmbracoDragonflythemingApiV1WhoAmI();
       if (a) {
         e.state = "failed", console.error(a);
         return;
       }
-      r !== void 0 && (this._serverUserData = r, e.state = "success"), o(this, n) && o(this, n).peek("warning", {
+      r !== void 0 && (this._serverUserData = r, e.state = "success"), s(this, n) && s(this, n).peek("warning", {
         data: {
           headline: `You are ${this._serverUserData?.name}`,
           message: `Your email is ${this._serverUserData?.email}`
         }
       });
-    }), h(this, v, async (t) => {
+    }), l(this, f, async (t) => {
       const e = t.target;
       e.state = "waiting";
-      const { data: r, error: a } = await d.whatsTheTimeMrWolf();
+      const { data: r, error: a } = await p.getUmbracoDragonflythemingApiV1WhatsTheTimeMrWolf();
       if (a) {
         e.state = "failed", console.error(a);
         return;
       }
       r !== void 0 && (this._timeFromMrWolf = new Date(r), e.state = "success");
-    }), h(this, _, async (t) => {
+    }), l(this, _, async (t) => {
       const e = t.target;
       e.state = "waiting";
-      const { data: r, error: a } = await d.whatsMyName();
+      const { data: r, error: a } = await p.getUmbracoDragonflythemingApiV1WhatsMyName();
       if (a) {
         e.state = "failed", console.error(a);
         return;
       }
       this._yourName = r, e.state = "success";
     }), this.consumeContext(C, (t) => {
-      N(this, n, t);
-    }), this.consumeContext(M, (t) => {
+      D(this, n, t);
+    }), this.consumeContext(w, (t) => {
       this.observe(
         t?.currentUser,
         (e) => {
@@ -107,7 +57,7 @@ let i = class extends W(w) {
     });
   }
   render() {
-    return y`
+    return v`
       <uui-box headline="Who am I?">
         <div slot="header">[Server]</div>
         <h2>
@@ -115,13 +65,13 @@ let i = class extends W(w) {
         </h2>
         <ul>
           ${this._serverUserData?.groups.map(
-      (t) => y`<li>${t.name}</li>`
+      (t) => v`<li>${t.name}</li>`
     )}
         </ul>
         <uui-button
           color="default"
           look="primary"
-          @click="${o(this, f)}"
+          @click="${s(this, d)}"
         >
           Who am I?
         </uui-button>
@@ -138,7 +88,7 @@ let i = class extends W(w) {
         <uui-button
           color="default"
           look="primary"
-          @click="${o(this, _)}"
+          @click="${s(this, _)}"
         >
           Whats my name?
         </uui-button>
@@ -156,7 +106,7 @@ let i = class extends W(w) {
         <uui-button
           color="default"
           look="primary"
-          @click="${o(this, v)}"
+          @click="${s(this, f)}"
         >
           Whats the time Mr Wolf?
         </uui-button>
@@ -178,10 +128,10 @@ let i = class extends W(w) {
   }
 };
 n = /* @__PURE__ */ new WeakMap();
+d = /* @__PURE__ */ new WeakMap();
 f = /* @__PURE__ */ new WeakMap();
-v = /* @__PURE__ */ new WeakMap();
 _ = /* @__PURE__ */ new WeakMap();
-i.styles = [
+o.styles = [
   x`
       :host {
         display: grid;
@@ -204,23 +154,23 @@ i.styles = [
     `
 ];
 u([
-  c()
-], i.prototype, "_yourName", 2);
+  h()
+], o.prototype, "_yourName", 2);
 u([
-  c()
-], i.prototype, "_timeFromMrWolf", 2);
+  h()
+], o.prototype, "_timeFromMrWolf", 2);
 u([
-  c()
-], i.prototype, "_serverUserData", 2);
+  h()
+], o.prototype, "_serverUserData", 2);
 u([
-  c()
-], i.prototype, "_contextCurrentUser", 2);
-i = u([
-  T("example-dashboard")
-], i);
-const S = i;
+  h()
+], o.prototype, "_contextCurrentUser", 2);
+o = u([
+  U("example-dashboard")
+], o);
+const S = o;
 export {
-  i as ExampleDashboardElement,
+  o as ExampleDashboardElement,
   S as default
 };
-//# sourceMappingURL=dashboard.element-DUiJrqFu.js.map
+//# sourceMappingURL=dashboard.element-BN_9a9go.js.map

@@ -4,7 +4,7 @@ using Umbraco.Cms.Api.Common.Attributes;
 using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Cms.Web.Common.Routing;
 
-namespace DragonflyUmbracoTheming.Controllers
+namespace Dragonfly.UmbracoTheming.Controllers
 {
     [ApiController]
     [BackOfficeRoute("dragonflytheming/api/v{version:apiVersion}")]

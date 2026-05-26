@@ -159,6 +159,15 @@ Any css file in the "Themes/~CssOverrides" folder will be available in the CSS P
 
 The Views folder in your Theme is where all customized View files should go. Just like in the main Umbraco-provided Views folder, you can have a "Partials" subfolder, etc. When a page is routed to its View, the Theme folder will be checked first, and if a matching file is not found there, it will default to the file in the primary Views folder (so make sure **all** your templates do have a file in the primary Views folder - even if it is blank).
 
+You don't have to create customized View files for every separate Content Type, if you have a `_Master.cshtml` file managing the primary design as a `Layout` view, you can update your primary View files (in the `/Views` root folder ) with this in the top code block:
+
+```html
+    var thisTheme = ThemeHelper.GetSiteThemeName(Model);
+    Layout = $"{thisTheme}/_Master.cshtml";
+```
+
+and it will use the `_Master.cshtml` file from the Theme folder, while using the rest of the page layout from this primary View file.
+
 ### Assets
 
 You can organize your assets folder however you like, but keep in mind that certain ThemeHelper functions rely upon knowing where the CSS and JS files are located. If you can standardize across all your themes, and make sure the AppSettings reflects your folder structure, that would be best. The config values represent the path once inside the 'Themes/MY_THEME/Assets/' folder:
