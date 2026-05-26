@@ -35,13 +35,13 @@ Please [report any issues](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming
 
 Generally, you will want to install the .Web version of the package into your Umbraco project, which includes the App_Plugins, a setup of the Themes folders, and example Razor files:
 
-[![Nuget Downloads](http://buildstats.info/nuget/Dragonfly.Umbraco10.Theming.Web)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Web/)
+[![Nuget Downloads](https://img.shields.io/nuget/vpre/Dragonfly.Umbraco10.Theming.Web)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Web/)
 
      PM>   Install-Package Dragonfly.Umbraco10.Theming.Web
 
 There is also a .Core version available which only includes the DLL files. This can be used if you have an accompanying Class project which needs to access the ThemeHelperService:
 
-[![Nuget Downloads](http://buildstats.info/nuget/Dragonfly.Umbraco10.Theming.Core)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Core/)
+[![Nuget Downloads](https://img.shields.io/nuget/vpre/Dragonfly.Umbraco10.Theming.Core)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming.Core/)
 
      PM>   Install-Package Dragonfly.Umbraco10.Theming.Core
 
@@ -219,9 +219,15 @@ If you have theme-specific configuration files of whatever type, they can be add
 
 You can get either the current theme's file, or the default, if none exists in the current theme in your custom code using `GetFinalThemePath()` with `Theming.PathType.Configs` (or use the shortcut - `GetThemeConfigsFolderPath()`).
 
-## Changes from v7/v8 Version to v10 Version
+## Changes Between Major Versions
 
 If you are updating an Umbraco site which was previously using Dragonfly Theming, there are a few things you might want to know that have changed.
+
+### Changes from v10 Version (1.2.x) to v17 Version (17.x)
+
+The main thing is that Smidge is no longer included by default in Umbraco Core, so the Smidge example code has been removed from the example CSHTML files. Macro and Umbraco Grid examples have also been removed. You can always see the old examples on the [v13 branch of GitHub](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming/tree/v13/src/Theming.Web/Themes/~CopyForNewTheme/Views)
+
+### Changes from v7/v8 Version to v10-13 Version
 
 In terms of the code itself, there was some refactoring as well as bringing it into line with ASP.Net Core / Umbraco 10 best-practices (specifically better use of IoC / Dependency Injection). I've also added many more configurations for things which were otherwise hard-coded (such as folder locations, etc.).
 
