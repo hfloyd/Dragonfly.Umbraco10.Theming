@@ -14,9 +14,9 @@
 	<!-- Package Description-->
 	<PropertyGroup>
 		<PackageId>Dragonfly.Umbraco10.Theming.Core</PackageId>
-		<Title>Dragonfly Umbraco 10 Theming Core</Title>
+		<Title>Dragonfly Umbraco 10+ Theming Core</Title>
 		<Product>Dragonfly Umbraco Theming</Product>
-		<Description>A Theming system for Umbraco [.DLL ONLY (for class projects)] (min. Umbraco 10.0)</Description>
+		<Description>A Theming system for Umbraco v.17 [.DLL ONLY (for class projects)]</Description>
 
 		<PackageProjectUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</PackageProjectUrl>
 		<RepositoryType>git</RepositoryType>

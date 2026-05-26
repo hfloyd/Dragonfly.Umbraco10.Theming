@@ -15,9 +15,9 @@
 	<!-- Package Description-->
 	<PropertyGroup>
 		<PackageId>Dragonfly.Umbraco10.Theming.Web</PackageId>
-		<Title>Dragonfly Umbraco 10 Theming Web</Title>
+		<Title>Dragonfly Umbraco 10+ Theming Web</Title>
 		<Product>Dragonfly Umbraco Theming</Product>
-		<Description>A Theming system for Umbraco [Full install for website] (min. Umbraco 10.0)</Description>
+		<Description>A Theming system for Umbraco v.17 [Full install for website]</Description>
 
 		<PackageProjectUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.Theming</PackageProjectUrl>
 		<RepositoryType>git</RepositoryType>
