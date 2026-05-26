@@ -1,6 +1,28 @@
-# Dragonfly Umbraco 10 Theming
+# Dragonfly Umbraco 10+ Theming
 
- A theming system for Umbraco version 10 created by [Heather Floyd](https://www.HeatherFloyd.com).
+ A theming system for Umbraco created by [Heather Floyd](https://www.HeatherFloyd.com).
+
+## Versions
+
+Install the correct package/version for your Umbraco installation.
+
+| Umbraco Version | Package / Version                                                                |
+| --------------- | -------------------------------------------------------------------------------- |
+| v 17            | This package - v. 17.x                                                           |
+| v 16            | not supported                                                                    |
+| v 15            | not supported                                                                    |
+| v 14            | not supported                                                                    |
+| v 13            | This package - v. 1.2.x                                                          |
+| v 12            | untested - try v. 1.2.x                                                          |
+| v 11            | untested - try v. 1.2.x                                                          |
+| v 10            | This package - v. 1.2.x                                                          |
+| v 9             | not supported                                                                    |
+| v 8             | [Dragonfly.Umbraco8Theming](https://github.com/hfloyd/Dragonfly.Umbraco8Theming) |
+| v 7             | [Dragonfly.UmbracoTheming](https://github.com/hfloyd/Dragonfly.UmbracoTheming)   |
+
+## Background
+
+
 
 > For a general explanation of the concept, see the article ["How to Create Multiple Unique Sites in One Installation Using Theming and the Umbraco Grid"](https://24days.in/umbraco-cms/2016/unique-sites-using-theming/). 
 > Please be aware that this article was published in 2016 before the code was further developed and put into GitHub. Also, the article is based on Umbraco 7, thus should really just be used for a general understanding - **this package includes all the code otherwise provided by the ZIP file mentioned in the article.** 
