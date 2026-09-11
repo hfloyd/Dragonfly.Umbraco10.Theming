@@ -1,5 +1,10 @@
 # Dragonfly Umbraco 10+ Theming
 
+[![Downloads](https://img.shields.io/nuget/dt/Dragonfly.Umbraco10.Theming.Web?color=FF5F49)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming/)
+[![NuGet](https://img.shields.io/nuget/vpre/Dragonfly.Umbraco10.Theming.Web)](https://www.nuget.org/packages/Dragonfly.Umbraco10.Theming)
+[![GitHub license](https://img.shields.io/github/license/hfloyd/Dragonfly.Umbraco10.Theming)](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming/blob/main/LICENSE)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Code-yellow)](https://github.com/hfloyd/Dragonfly.Umbraco10.Theming/blob/main/LICENSE)
+
  A theming system for Umbraco created by [Heather Floyd](https://www.HeatherFloyd.com).
 
 ## Versions
@@ -21,8 +26,6 @@ Install the correct package/version for your Umbraco installation.
 | v 7             | [Dragonfly.UmbracoTheming](https://github.com/hfloyd/Dragonfly.UmbracoTheming)   |
 
 ## Background
-
-
 
 > For a general explanation of the concept, see the article ["How to Create Multiple Unique Sites in One Installation Using Theming and the Umbraco Grid"](https://24days.in/umbraco-cms/2016/unique-sites-using-theming/). 
 > Please be aware that this article was published in 2016 before the code was further developed and put into GitHub. Also, the article is based on Umbraco 7, thus should really just be used for a general understanding - **this package includes all the code otherwise provided by the ZIP file mentioned in the article.** 
