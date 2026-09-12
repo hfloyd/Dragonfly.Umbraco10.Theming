@@ -42,11 +42,11 @@
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Core</AssemblyName>
 		<!-- REMINDER: When updating the MAJOR version, also update '\src\Directory.Packages.props' -->
-		<Version>17.1.0</Version>
+		<Version>17.2.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
-		<PackageReleaseNotes>Fixing Dependencies</PackageReleaseNotes>
+		<PackageReleaseNotes>Fixing static web assets issue</PackageReleaseNotes>
 		<VersionSuffix Condition="'$(Configuration)'=='Debug'">-prerelease$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
 	</PropertyGroup>
 
@@ -60,7 +60,7 @@
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
-		<None Include="..\..\README.md">
+		<None Include="..\..\.github\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>

@@ -251,8 +251,12 @@ src/
 │   │       └── entrypoints/    # Extension entry point + manifest
 │   ├── Composers/              # DragonflyThemingApiComposer (Swagger/OpenAPI setup)
 │   ├── Controllers/            # Backoffice API controllers
+│   ├── Scaffolding/            # Theme templates and special folders, packed to 'scaffolding/' in the NuGet package
+│   │   ├── Themes/             # Content-root Views template
+│   │   └── wwwroot/            # Static-file template, '~' special folders, fallback Assets readme
+│   ├── build/                  # Packed as buildTransitive targets: copies Scaffolding folders into the site when missing
 │   └── wwwroot/
-│       └── Themes/             # Theme templates and special folders
+│       └── App_Plugins/        # Built backoffice extension (the only static web assets)
 └── UmbracoTheming.TestSite/    # Functional test/demo Umbraco 17 installation
 ```
 

@@ -1,0 +1,31 @@
+<Project>
+
+    <!--
+        Copies the Dragonfly Theming scaffolding (theme template, '~' special folders and fallback Assets readme)
+        into the website project as regular files which the developer can edit.
+        Each scaffolding folder is only copied when that folder does not exist in the project yet,
+        so edited or deleted scaffolding files are never overwritten or restored.
+    -->
+    <PropertyGroup>
+        <DragonflyUmbracoThemingScaffoldingPath>$(MSBuildThisFileDirectory)..\scaffolding\</DragonflyUmbracoThemingScaffoldingPath>
+    </PropertyGroup>
+
+    <Target Name="CopyDragonflyUmbracoThemingScaffolding" BeforeTargets="BeforeBuild" Condition="'$(UsingMicrosoftNETSdkWeb)' == 'true'">
+        <ItemGroup>
+            <DragonflyUmbracoThemingScaffoldingFiles Include="$(DragonflyUmbracoThemingScaffoldingPath)Themes\**\*.*" Condition="!Exists('$(MSBuildProjectDirectory)\Themes')">
+                <ScaffoldingDestination>$(MSBuildProjectDirectory)\Themes\</ScaffoldingDestination>
+            </DragonflyUmbracoThemingScaffoldingFiles>
+            <DragonflyUmbracoThemingScaffoldingFiles Include="$(DragonflyUmbracoThemingScaffoldingPath)wwwroot\Themes\**\*.*" Condition="!Exists('$(MSBuildProjectDirectory)\wwwroot\Themes')">
+                <ScaffoldingDestination>$(MSBuildProjectDirectory)\wwwroot\Themes\</ScaffoldingDestination>
+            </DragonflyUmbracoThemingScaffoldingFiles>
+            <DragonflyUmbracoThemingScaffoldingFiles Include="$(DragonflyUmbracoThemingScaffoldingPath)wwwroot\Assets\**\*.*" Condition="!Exists('$(MSBuildProjectDirectory)\wwwroot\Assets')">
+                <ScaffoldingDestination>$(MSBuildProjectDirectory)\wwwroot\Assets\</ScaffoldingDestination>
+            </DragonflyUmbracoThemingScaffoldingFiles>
+        </ItemGroup>
+        <Message Text="Copying Dragonfly.UmbracoTheming scaffolding files: #@(DragonflyUmbracoThemingScaffoldingFiles->Count()) files" Importance="high" Condition="'@(DragonflyUmbracoThemingScaffoldingFiles)' != ''" />
+        <Copy
+        SourceFiles="@(DragonflyUmbracoThemingScaffoldingFiles)"
+        DestinationFiles="@(DragonflyUmbracoThemingScaffoldingFiles->'%(ScaffoldingDestination)%(RecursiveDir)%(Filename)%(Extension)')" />
+    </Target>
+
+</Project>

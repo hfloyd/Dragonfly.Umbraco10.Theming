@@ -42,11 +42,11 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly.UmbracoTheming</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoTheming.Web</AssemblyName>
-		<Version>17.1.0</Version>
+		<Version>17.2.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<VersionPrefix>$(Version)</VersionPrefix>
-		<PackageReleaseNotes>Fixing Dependencies</PackageReleaseNotes>
+		<PackageReleaseNotes>Fixing static web assets issue</PackageReleaseNotes>
 		<VersionSuffix Condition="'$(Configuration)'=='Debug'">-prerelease$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
 	</PropertyGroup>
 
@@ -59,7 +59,7 @@
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
-		<None Include="..\..\README.md">
+		<None Include="..\..\.github\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
@@ -90,7 +90,7 @@
 		<ProjectReference Include="..\Theming.Core\Dragonfly.UmbracoTheming.Core.csproj" />
 	</ItemGroup>
 
-	<!--Include App_Plugins, Themes, Views & targets file-->
+	<!--Include App_Plugins, Views & targets file-->
 	<ItemGroup>
 		<Content Include="App_Plugins\Dragonfly.UmbracoTheming\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -99,12 +99,6 @@
 		</Content>
 
 		<Content Include="wwwroot\**\*.*">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-			<Pack>True</Pack>
-		</Content>
-
-		<Content Include="Themes\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 			<Pack>True</Pack>
@@ -123,46 +117,16 @@
 	</ItemGroup>
 
 
+	<!--Scaffolding files which build\Dragonfly.Umbraco10.Theming.Web.targets copies into the website project-->
+	<ItemGroup>
+		<None Include="Scaffolding\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>scaffolding</PackagePath>
+		</None>
+	</ItemGroup>
+
 	<ItemGroup>
 		<None Remove="Directory.Packages.props" />
-		<None Remove="wwwroot\Themes\~CopyForNewTheme\Assets\README.txt" />
-		<None Remove="wwwroot\Themes\~CopyForNewTheme\Configs\README.txt" />
-		<None Remove="wwwroot\Themes\~CopyForNewTheme\Theme.config" />
-		<None Remove="wwwroot\Themes\~CssOverrides\CSS-Override-Files-Readme.txt" />
-		<None Remove="wwwroot\Themes\~CssOverrides\empty.css" />
-		<None Remove="wwwroot\Themes\~DefaultConfigs\README.txt" />
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="wwwroot\Themes\~CopyForNewTheme\Assets\README.txt">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-			<Pack>True</Pack>
-		</Content>
-		<Content Include="wwwroot\Themes\~CopyForNewTheme\Configs\README.txt">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-			<Pack>True</Pack>
-		</Content>
-		<Content Include="wwwroot\Themes\~CopyForNewTheme\Theme.config">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-			<Pack>True</Pack>
-		</Content>
-		<Content Include="wwwroot\Themes\~CssOverrides\CSS-Override-Files-Readme.txt">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-			<Pack>True</Pack>
-		</Content>
-		<Content Include="wwwroot\Themes\~CssOverrides\empty.css">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-			<Pack>True</Pack>
-		</Content>
-		<Content Include="wwwroot\Themes\~DefaultConfigs\README.txt">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-			<Pack>True</Pack>
-		</Content>
 	</ItemGroup>
 
 

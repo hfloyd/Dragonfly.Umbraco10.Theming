@@ -60,6 +60,14 @@ GitHub Repository: [https://github.com/hfloyd/Dragonfly.Umbraco10.Theming](https
 
 Because this is a .Net Core site and Views are handled differently from static files, you will need to have two "Themes/[MyTheme]" folders - one next to the "Views" folder for holding Views and Partials, and one inside the wwwroot folder to hold all static theme-related files (css, js, images). Your Theme name should be the same in both "Themes" folders. 
 
+When the .Web package is installed, building your project copies the Theming scaffolding into it as regular files you can edit:
+
+- `Themes/~CopyForNewTheme/Views/` - example Razor files for a new Theme
+- `wwwroot/Themes/~CopyForNewTheme/`, `wwwroot/Themes/~CssOverrides/` and `wwwroot/Themes/~DefaultConfigs/` - the static-file side of the Theme template, and the special folders
+- `wwwroot/Assets/Readme.md` - explains the fall-back assets folder
+
+Each of the `Themes`, `wwwroot/Themes` and `wwwroot/Assets` folders is only copied if it does not already exist in your project, so your edits (and any files you delete) are never overwritten. To get a fresh copy of the scaffolding, rename the folder and build again.
+
 On your root Document Type, use the included "Theme Picker" Property Type to add a property for the site's chosen theme. 
 
 In appSettings.json add this section at the root-level (aka a sibling of 'Umbraco', not a child):
